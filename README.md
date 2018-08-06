@@ -9,6 +9,12 @@ To run AlexNet:
 
 ```./model```
 
+To run MNIST:
+
+```make mnist_model```
+
+```./model```
+
 ### Current Activity
 * Sam: Build Alexnet with hdf5 automatized weight
 * Arthur: Reboot repo, cleanup, filter for final codes.
