@@ -6,6 +6,7 @@
 #include "include/Fc.h"
 #include <string.h>
 #include <time.h>
+#include <math.h>
 
 float** basicBlockPool(float** input, int input_d, float*** conv_weight,
                    int conv_weight_d, float* conv_bias, int conv_padding,
@@ -169,27 +170,50 @@ void alexnet() {
 
   float* output = Fc(linear2_w, 4096, linear2_b, 1000, linear1, 0);
 
-  float max = output[0];
-  int index = 1000;
-  for(int class = 0; class < 1000; class++) {
-    if(output[class] >= max) {
-      max = output[class];
-      index = class;
+  int index[3] = {0, 1000, 1000};
+  float max[3] = {output[0], -1, -1};
+  for(int class = 1; class < 1000; class++) {
+    if(output[class] >= max[0]) {
+      max[0] = output[class];
+      index[0] = class;
     }
   }
 
-  char class[80];
+  float sum = 0;
+  for(int class = 0; class < 1000; class++) {
+    output[class] -= max[0];
+    output[class] = exp(output[class]);
+    sum += output[class];
+  }
+
+  for(int class = 0; class < 1000; class++) {
+    output[class] = output[class]/sum;
+    if((class != index[0]) && (output[class] >= max[1])) {
+      max[1] = output[class];
+      index[1] = class;
+    }
+  }
+
+  for(int i = 0; i < 1000; i++) {
+    if((i != index[0]) && (i != index[1]) && (output[i] >= max[2])) {
+      max[2] = output[i];
+      index[2] = i;
+    }
+  }
+
+  char class[1000][30];
   FILE * fp;
   fp = fopen ("alex_data/classes.txt", "rb");
   for(int i = 0; i < 1000; i++) {
-    fscanf(fp, "%s\n", class);
-    if(i == index) {
-      break;
-    }
+    fscanf(fp, "%s\n", class[i]);
   }
   fclose(fp);
   free(output);
-  printf("predicted = %s\n", class);
+  printf("Top 3 Predictions\n");
+  for(int i = 0; i < 3; i++) {
+    printf("%d. \"%s\" with %.2f%% probability\n", i+1, class[index[i]],
+           output[index[i]]*100);
+  }
 }
 
 int main() {
@@ -198,7 +222,7 @@ int main() {
   alexnet();
   clock_t end = clock();
   double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
-  printf("Time Spent: %f\n", time_spent);
+  printf("Time Spent: %.2f seconds\n", time_spent);
 
   return 0;
 }

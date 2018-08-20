@@ -23,4 +23,4 @@ Fc.o: include/Fc.c include/Fc.h include/helper.h
 	gcc -c -g --std=c99 include/Fc.c
 
 clean:
-	rm -rf model *.o .DS_Store image.txt *.jpg
+	rm -rf model *.o .DS_Store image.txt
