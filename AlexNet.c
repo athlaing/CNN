@@ -31,7 +31,6 @@ float** basicBlockPool(float** input, int input_d, float*** conv_weight,
       for(int channel = 0; channel < input_ch; channel++) {
         conv[filter][element] += conv_hold[channel][element];
       }
-      conv[filter][element] = relu(conv[filter][element]);
     }
     for(int channel = 0; channel < input_ch; channel++) {
       free(conv_hold[channel]);

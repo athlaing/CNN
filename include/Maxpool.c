@@ -49,5 +49,10 @@ float get_max(float* input, int input_d, int filter_d, int filter_s, int start) 
       output = input[start + offset];
     }
   }
-  return output;
+  if(output < 0) {
+    return 0;
+  }
+  else {
+    return output;
+  }
 }
