@@ -1,0 +1,68 @@
+module bfloat16_add_vt;
+  reg reset;
+  reg clk;
+  wire ready;
+  reg [15:0] a;
+  reg [15:0] b;
+  reg [2:0] counter;
+  wire [15:0] out;
+
+  bfloat16_add adder(.reset(reset), .clk(clk), .a(a), .b(b), .out(out), .ready(ready));
+
+  initial begin
+    a = 16'b0_00000000_0000000; //starts with 0
+    b = 16'b0_00000000_0000000; //starts with 0
+    counter = 3'b000;
+    repeat (8) begin
+      reset = 1;
+      clk = 0;
+      while (ready == 0)
+        #1
+        clk = ~clk;
+      end
+      $display("reset = %b, clk = %b, a = %b, b = %b, out = %b, ready = %b, counter = %b",
+                reset, clk, a, b, out, ready, counter);
+
+      /*=============================CASES====================================*/
+      if(counter == 3'b000) begin
+        counter = counter + 3'b001;
+        a = 16'b0_01111100_0010100; // 0.1453
+        b = 16'b0_01111110_0001000; // 0.5323
+      end
+      else if(counter == 3'b001) begin
+        counter = counter + 3'b001;
+        a = 16'b0_10000010_0101010; // 10.654
+        b = 16'b0_10000100_0000001; // 32.452
+      end
+      else if(counter == 3'b010) begin
+        counter = counter + 3'b001;
+        a = 16'b0_10000011_1111001; // 31.131
+        b = 16'b1_01111100_1101111; // -0.234
+      end
+      else if(counter == 3'b011) begin
+        counter = counter + 3'b001;
+        a = 16'b1_01111100_1101111; // -0.234
+        b = 16'b0_10000011_1011011; // 27.444
+      end
+      else if(counter == 3'b100) begin
+        counter = counter + 3'b001;
+        a = 16'b0_10000011_1001001; // 25.212
+        b = 16'b1_10000011_0001001; //-17.145
+      end
+      else if(counter == 3'b101) begin
+        counter = counter + 3'b001;
+        a = 16'b1_10000011_0001001; //-17.145
+        b = 16'b0_10000011_1001001; // 25.212
+      end
+      else if(counter == 3'b110) begin
+        counter = counter + 3'b001;
+        a = 16'b0_00000000_0000000; // 0
+        b = 16'b0_10000011_1011011; // 27.444
+      end
+      else if(counter == 3'b111) begin
+        counter = counter + 3'b001;
+        a = 16'b1_10000011_0001001; //-17.145
+        b = 16'b0_00000000_0000000; // 0
+      end
+  end
+endmodule
