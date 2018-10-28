@@ -1,5 +1,5 @@
-`timescale 10ps/1ps
-`celldefine
+//`timescale 10ps/1ps
+//`celldefine
 
 module adder42(a, b, c, d, cin, carry, sum, cout);
 
@@ -17,4 +17,4 @@ module adder42(a, b, c, d, cin, carry, sum, cout);
     adder32 fa_1(.a(temp), .b(d), .cin(cin), .cout(carry), .sum(sum));
 
 endmodule
-`endcelldefine
+//`endcelldefine

@@ -1,15 +1,15 @@
-`timescale 10ps/1ps
-`celldefine
-module adder32(a, b, c, cout, sum); 
+//`timescale 10ps/1ps
+//`celldefine
+module adder32(a, b, cin, cout, sum); 
 
 	input a;
 	input b;
-	input c;
+	input cin;
 	output cout;
 	output sum;
 
-	assign sum = a ^ b ^ c;
-	assign cout = (a & b) | (c & (a ^ b));
+	assign sum = a ^ b ^ cin;
+	assign cout = (a & b) | (cin & (a ^ b));
 
 endmodule
-`endcelldefine
+//`endcelldefine
