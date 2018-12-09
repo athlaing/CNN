@@ -89,7 +89,7 @@ Images are at highest resolution, download them to have zoom in. ````dot```` fil
 also available inside ````\image```` for interactive sessions.
 
 ### Adder
-![Adder 32](./image/adder.jpg)
+![Adder 32](./image/add.jpg)
 
 ### Multiplier
 ##### Adder 32
