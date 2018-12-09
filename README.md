@@ -1,6 +1,45 @@
-# CNN-FPGA
-An Assortment of Convolutional Neural Networks on verilog with reference on C++
+# CNN on FPGA
+An Assortment of Convolutional Neural Network Layers on Verilog with reference on C
 
+
+### Current Activity
+* Minh Truong:
+* Arthur Hlaing:
+* Kawah Yee:
+* Adam Jones:
+
+### Past Activity
+* Minh Truong:
+  * Implemented maxpooling layer.
+  * Implemented fully connected layer.
+  * Implemented batchnorm layer.
+  * Connected different MNIST layers together.
+  * Wrote parsers for parameters load.
+  * Developed customizable ````pytorch```` model package.
+  * Setup accuracy testing script for MNIST C implementation.
+  * Built and extracted parameters from Resnet50 architecture
+  * Built HDF5 file system.
+  * Built bfloat16 adder.
+  * Built bfloat16 mantisa multiplier.
+  * Built bfloat16 multiplier
+* Arthur Hlaing:
+  * Implemented convolutional layer.
+  * Built and extracted parameters from the MNIST architecture.
+  * Connected different MNIST layers together.
+  * Organized parameters files output.
+  * Developed Pytorch MNIST model
+  * Debugged weights migration to C code
+  * Built inLayer() of Resnet50
+  * Built BasicBlock() and Bottleneck() of Resnet50
+  * Built Alexnet in C.
+  * Built bfloat16 adder.
+  * Built booth encoder.
+  * Built bfloat16 mantisa multiplier.
+  * Built bfloat16 multiplier
+* Kawah Yee:
+* Adam Jones:
+
+# C Code
 ### Run reference
 To run AlexNet:
 
@@ -42,36 +81,44 @@ before git.
 * Test on 200 images for MNIST C implementation shows accuracy of 95.5% . Real
 accuracy from Pytorch is 93% .There are memory leaks so do not run too many test cases.
 
-### Current Activity
-* Sam:
-* Arthur:
+# Verilog Code
+### Status
+Bfloat16 format is implemented on multiplier and adder. Exhaustive testbench is needed
+to validate the implementation. Verilog is currently synthesize thanks to ````yosys````.
 
-### Past Activity
-* Sam:
-  * Implemented maxpooling layer.
-  * Implemented fully connected layer.
-  * Implemented batchnorm layer.
-  * Connected different MNIST layers together.
-  * Wrote parsers for parameters load.
-  * Developed customizable ````pytorch```` model package.
-  * Setup accuracy testing script for MNIST C implementation.
-  * Built and extracted parameters from Resnet50 architecture
-  * Built HDF5 file system.
-  * Built bfloat16 adder.
-  * Built bfloat16 mantisa multiplier.
-* Arthur:
-  * Implemented convolutional layer.
-  * Built and extracted parameters from the MNIST architecture.
-  * Connected different MNIST layers together.
-  * Organized parameters files output.
-  * Developed Pytorch MNIST model
-  * Debugged weights migration to C code
-  * Built inLayer() of Resnet50
-  * Built BasicBlock() and Bottleneck() of Resnet50
-  * Built Alexnet in C.
-  * Built bfloat16 adder.
-  * Built booth encoder.
-  * Built bfloat16 mantisa multiplier testbench.
+### Adder
+
+### Multiplier
+##### Adder 32
+![Adder 32](./image/32.jpg)
+
+This is Full-Adder circuit used in ````bfloat_mantisa_mult.v````. This circuit is
+used for adding the first and second place binary bits after encoding.
+
+##### 4-2 Compressor
+![Adder 42](./image/42.jpg)
+
+This is Adder circuit used in ````bfloat_mantisa_mult.v```` for the next 10 binary bits
+after encoding.
+
+##### Booth Encoder
+![Booth encoder](./image/encoder.jpg)
+
+This is booth encoding lookup table to transform ````b```` in ````a * b = c````
+into partial products. ````a```` can be rewritten in terms of these partial products
+and ````adder32.v````, ````adder42.v```` are used to sum them.
+
+##### Mantissa Integer Multiplier
+![mantissa](./image/mantisa.jpg)
+
+The previous 3 circuits make up the Mantissa Integer Multiplier. This circuit takes
+3 clock cycle to warm-up and produce 1 product per cycle through pipelining.
+
+##### Bfloat16 Multiplier
+![mult](./image/mult.jpg)
+
+This circuit finishes the equation by resolving sign and exponent bits. It also
+truncate the product of ````bfloat_mantisa_mult.v```` to comply with bfloat16 format.
 
 ### Links
 [Team Drive](https://drive.google.com/drive/u/0/folders/0ANe2ju35xsddUk9PVA)
