@@ -85,8 +85,11 @@ accuracy from Pytorch is 93% .There are memory leaks so do not run too many test
 ### Status
 Bfloat16 format is implemented on multiplier and adder. Exhaustive testbench is needed
 to validate the implementation. Verilog is currently synthesize thanks to ````yosys````.
+Images are at highest resolution, download them to have zoom in. ````dot```` files are
+also available inside ````\image```` for interactive sessions.
 
 ### Adder
+![Adder 32](./image/adder.jpg)
 
 ### Multiplier
 ##### Adder 32
