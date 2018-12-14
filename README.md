@@ -1,6 +1,9 @@
-# CNN on FPGA
-An Assortment of Convolutional Neural Network Layers on Verilog with reference on C
-
+<p align="center">
+<img src="./image/icon.png" alt="drawing" width="200"/>
+</p>
+<p align="center">
+A Convolutional Neural Network Layers Library on FPGA
+</p>
 
 ### Current Activity
 * Minh Truong:
