@@ -1,0 +1,34 @@
+module multiplier_vt;
+  reg [6:0] a;
+  reg [6:0] b;
+  wire [13:0] out;
+  reg clk;
+  bfloat_mantissa_mult test(.clk(clk), .a(a), .b(b), .out(out));
+  
+  initial begin
+    clk = 0;
+    
+    //a = 7'b111_1111;
+    //b = 7'b111_1111;
+
+    //#10
+    //a = 7'b000_0000;
+    //b = 7'b101_0101;
+
+    //#10
+    //a = 7'b010_1010;
+    //b = 7'b111_0000;
+
+    //#10
+    a = 7'b101_1111;
+    b = 7'b111_1010;
+
+    #200
+    $finish;
+  end
+
+  always begin
+    clk = ~clk;
+    #5;
+  end
+endmodule

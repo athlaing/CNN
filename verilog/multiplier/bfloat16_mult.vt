@@ -1,0 +1,27 @@
+module float_multiplier_vt;
+  reg [15:0] a;
+  reg [15:0] b;
+  wire [15:0] out;
+  reg clk;
+  bfloat16_mult test(.clk(clk), .a(a), .b(b), .out(out));
+
+  initial begin
+    clk = 0;
+
+    a = 16'b0_1000_0000_0100_011; //2.561
+    b = 16'b1_1000_0010_1110_110; //-15.375
+
+    #20
+
+    a = 16'b0_1010_0010_0100_001; //
+    b = 16'b0_1010_0110_1010_100; //
+
+    #20000
+    $finish;
+  end
+
+  always begin
+    clk = ~clk;
+    #10;
+  end
+endmodule
