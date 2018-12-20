@@ -12,8 +12,9 @@ module bfloat16_mult(clk, a, b, out);
   wire [8:0] exp;
   reg [15:0] a_r, b_r;
 
-  bfloat_man_mult m0(.a({2'b01, a_r[6:0]}), .b({2'b01, b_r[6:0]}), .out(man_mult_out));
-
+  //bfloat_man_mult m0(.a({2'b01, a_r[6:0]}), .b({2'b01, b_r[6:0]}), .out(man_mult_out));
+  assign man_mult_out = {2'b01, a_r[6:0]} * {2'b01, b_r[6:0]};
+  
   always @(man_mult_out) begin
     casez(man_mult_out)
       16'b1???????????????: shift = 4'd00;
