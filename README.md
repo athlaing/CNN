@@ -5,42 +5,11 @@
 A Convolutional Neural Network Layers Library on FPGA
 </p>
 
-### Current Activity
-* Minh Truong:
-* Arthur Hlaing:
-* Kawah Yee:
-* Adam Jones:
-
-### Past Activity
-* Minh Truong:
-  * Implemented maxpooling layer.
-  * Implemented fully connected layer.
-  * Implemented batchnorm layer.
-  * Connected different MNIST layers together.
-  * Wrote parsers for parameters load.
-  * Developed customizable ````pytorch```` model package.
-  * Setup accuracy testing script for MNIST C implementation.
-  * Built and extracted parameters from Resnet50 architecture
-  * Built HDF5 file system.
-  * Built bfloat16 adder.
-  * Built bfloat16 mantisa multiplier.
-  * Built bfloat16 multiplier
-* Arthur Hlaing:
-  * Implemented convolutional layer.
-  * Built and extracted parameters from the MNIST architecture.
-  * Connected different MNIST layers together.
-  * Organized parameters files output.
-  * Developed Pytorch MNIST model
-  * Debugged weights migration to C code
-  * Built inLayer() of Resnet50
-  * Built BasicBlock() and Bottleneck() of Resnet50
-  * Built Alexnet in C.
-  * Built bfloat16 adder.
-  * Built booth encoder.
-  * Built bfloat16 mantisa multiplier.
-  * Built bfloat16 multiplier
-* Kawah Yee:
-* Adam Jones:
+### Active Members
+* Minh Truong
+* Arthur Hlaing
+* Kawah Yee
+* Adam Jones
 
 # C Code
 ### Run reference
