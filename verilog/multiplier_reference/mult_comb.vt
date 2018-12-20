@@ -1,4 +1,4 @@
-module float_multiplier_vt;
+module mult_comb_vt;
   reg [15:0] a;
   reg [15:0] b;
   wire [15:0] out;

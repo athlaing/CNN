@@ -2,13 +2,15 @@ module bfloat16_mult(clk, a, b, out);
   input clk;
   input [15:0] a;
   input [15:0] b;
-  input [15:0] out;
+  output reg [15:0] out;
   wire [15:0] out_c;
   wire [15:0] man_mult_out;
   wire [15:0] man;
   reg [3:0] shift;
   wire [8:0] neg_shift;
+  wire [8:0] a_e, b_e;
   wire [8:0] exp;
+  reg [15:0] a_r, b_r;
 
   bfloat_man_mult m0(.a({2'b01, a_r[6:0]}), .b({2'b01, b_r[6:0]}), .out(man_mult_out));
 
@@ -39,7 +41,7 @@ module bfloat16_mult(clk, a, b, out);
   assign out_c[15] = a_r[15] ^ b_r[15];
   assign man = man_mult_out << shift;
   assign out_c[6:0] = man[14:8];
-  assign neg_shift = ~({5'b00000, shift}) + 1;
+  assign neg_shift = ~({5'b00000, shift}) + 1'b1;
   assign exp = a_e + b_e + 9'b010000000 + neg_shift;
   assign out_c[14:7] = exp[7:0];
 
