@@ -85,6 +85,7 @@ def mult_bfloat16(a, b):
 	#
 	
 	o_sign = int(a.sign) ^ int(b.sign)
+	o_sign = bin(o_sign)[2:]
 	o_exp = (int(a.exp,2) - 127)  + (int(b.exp,2) - 127)
 
 	#Add the implicit 1 in front of mantissa. See Bfloat16 format.
@@ -103,14 +104,13 @@ def mult_bfloat16(a, b):
 	#Normalize output mantissa, adding the extra exponents, and add the bias
 	o_exp += len(o_man) - (14) - (1)
 	o_exp += 127
+	o_exp = bin(o_exp)[2:].rjust(8, '0')
 
 	#Truncate partial sum
 	o_man = o_man[1:8].ljust(7, '0')
 
-
-
 	#concentate sign,exponent,mantissa into one string
-	mult_out = bin(o_sign)[2:] + bin(o_exp)[2:].zfill(8) + o_man
+	mult_out = bfloat(o_sign, o_exp, o_man)
 	return mult_out
 
 #---------------------------------------------------------------------------------------------
