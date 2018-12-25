@@ -4,7 +4,7 @@
 class bfloat:
 	def __init__(self, a):
 		if len(a) != 16:
-			return "Error: input isn't 16bits"
+			print("Argument isn't 16bits")
 		else:
 			self.sign = a[0]
 			self.exp = a[1:9]
@@ -110,7 +110,7 @@ def mult_bfloat16(a, b):
 	o_man = o_man[1:8].ljust(7, '0')
 
 	#concentate sign,exponent,mantissa into one string
-	mult_out = bfloat(o_sign, o_exp, o_man)
+	mult_out = bfloat(o_sign + o_exp + o_man)
 	return mult_out
 
 #---------------------------------------------------------------------------------------------
@@ -119,5 +119,5 @@ def mult_bfloat16(a, b):
 a = bfloat('0100000000100011')
 b = bfloat('1100000101110110')
 #result should be 11000010011100
-print(mult_bfloat16(a , b))
+print(mult_bfloat16(a , b).bin_parsed())
 
