@@ -82,8 +82,12 @@ def add_bin(a, b):
 def mult_bfloat16(a, b):
 	#
 	#Edge cases: +-Inf, +-NaN, Zero
-	#
+	#Work in progress
 	
+	if a.value == 'zero' or b.value == 'zero':
+		return bfloat('0000000000000000')
+	
+
 	o_sign = int(a.sign) ^ int(b.sign)
 	o_sign = bin(o_sign)[2:]
 	o_exp = (int(a.exp,2) - 127)  + (int(b.exp,2) - 127)
