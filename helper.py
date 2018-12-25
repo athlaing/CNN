@@ -32,11 +32,11 @@ class Bfloat:
             if self.man == [0, 0, 0, 0, 0, 0, 0]:
                 print(0.0)
             else:
-                
+
                 print((-1)**self.sign[0] * 2**(-126) * man_magnitude)
         elif self.exp == [1, 1, 1, 1, 1, 1, 1, 1]:
             print(float('Inf'))
-            
+
         else:
             print((-1)**self.sign[0] * 2**(exp_magnitude - 127) * (man_magnitude + 1))
 
@@ -46,7 +46,7 @@ class Bfloat:
 
 def magnitude(a):
     if(a.exp == [0, 0, 0, 0, 0, 0, 0, 0] or a.exp == [1, 1, 1, 1, 1, 1, 1, 1]):
-        man = sum(a.man[i] * 2**(6-i) for i in range(0,7))
+        man = sum(a.man[i] * 2**(6-i) for i in range(0,7)) + 128
         exp = sum(a.exp[i] * 2**(7-i) for i in range(0,8)) - 127
         return exp, man
     else:
@@ -77,7 +77,7 @@ def bfloat_mult(a, b):
         o_man = o_man[1:]
         diff = 7 - len(o_man)
         extra = [int(x)*0 for x in range(0, diff)]
-        o_man = o_man + extra   
+        o_man = o_man + extra
     o = Bfloat(o_sign, o_exp, o_man)
     return o
 
@@ -90,4 +90,3 @@ b = Bfloat("1", "10000010", "1110110")
 c = bfloat_mult(a, b)
 c.print()
 c.print_bin()
-
