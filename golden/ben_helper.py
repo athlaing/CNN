@@ -12,18 +12,10 @@ class bfloat:
 			self.value = ''
 
 			if self.exp == '11111111':
-				#if positive
-				if a[0] == '0':
-					if int(self.man,2) == 0:
-						self.value = '+inf'
-					else:
-						self.value = '+NaN'
-				#else negative
-				else: 
-					if int(self.man, 2) == 0:
-						self.value = '-inf'
-					else:
-						self.value = '-NaN'
+				if int(self.man,2) == 0:
+					self.value = 'inf'
+				else:
+					self.value = 'NaN'
 
 			if int(a,2) == 0:
 				self.value = "zero"
@@ -80,16 +72,23 @@ def add_bin(a, b):
 #	input: (a, b) two 16bit binary string in Bfloat16 format, where a[0], b[0] are the MSBs
 #	output: (mult_out) 16bit binary string in Bfloat16 format, where mult_out[0] is the
 def mult_bfloat16(a, b):
-	#
-	#Edge cases: +-Inf, +-NaN, Zero
-	#Work in progress
-	
-	if a.value == 'zero' or b.value == 'zero':
-		return bfloat('0000000000000000')
-	
 
+	#output sign
 	o_sign = int(a.sign) ^ int(b.sign)
 	o_sign = bin(o_sign)[2:]
+
+	#Edge cases for +-Inf, +-NaN, +-Zero	
+	#Order of precedence: NaN -> Zero -> Inf
+	if a.value == 'NaN' or b.value == 'NaN':
+		return bfloat(o_sign + '111111110000001')
+
+	if a.value == 'zero' or b.value == 'zero':
+		return bfloat(o_sign + '000000000000000')
+
+	if a.value == 'inf' or b.value == 'inf':
+		return bfloat(o_sign + '111111110000000')
+
+	#Substrate the bias and add the exponents.
 	o_exp = (int(a.exp,2) - 127)  + (int(b.exp,2) - 127)
 
 	#Add the implicit 1 in front of mantissa. See Bfloat16 format.
