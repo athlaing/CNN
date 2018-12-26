@@ -1,4 +1,4 @@
-module float_multiplier_vt;
+module mult_comb_vt;
   reg [15:0] a;
   reg [15:0] b;
   wire [15:0] out;
@@ -13,8 +13,8 @@ module float_multiplier_vt;
 
     #20
 
-    //a = 16'b0_1010_0010_0100_001; //
-    //b = 16'b0_1010_0110_1010_100; //
+    a = 16'b0_1000_0000_0000_000; //
+    b = 16'b0_1000_0000_1000_000; //
 
     #20000
     $finish;
