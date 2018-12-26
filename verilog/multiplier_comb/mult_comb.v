@@ -9,12 +9,12 @@ module bfloat16_mult(clk, a, b, out);
   reg [3:0] shift;
   wire [8:0] neg_shift;
   wire [8:0] a_e, b_e;
-  wire [8:0] exp;
+  wire [8:0] exp_off, exp_sum;
   reg [15:0] a_r, b_r;
 
   //bfloat_man_mult m0(.a({2'b01, a_r[6:0]}), .b({2'b01, b_r[6:0]}), .out(man_mult_out));
   assign man_mult_out = {2'b01, a_r[6:0]} * {2'b01, b_r[6:0]};
-  
+
   always @(man_mult_out) begin
     casez(man_mult_out)
       16'b1???????????????: shift = 4'd00;
@@ -37,14 +37,13 @@ module bfloat16_mult(clk, a, b, out);
     endcase
   end
 
-  assign a_e = {1'b0, a_r[14:7]} + 9'b110000001; // -127
-  assign b_e = {1'b0, b_r[14:7]} + 9'b110000001; // -127
   assign out_c[15] = a_r[15] ^ b_r[15];
   assign man = man_mult_out << shift;
   assign out_c[6:0] = man[14:8];
-  assign neg_shift = ~({5'b00000, shift}) + 1'b1;
-  assign exp = a_e + b_e + 9'b010000000 + neg_shift;
-  assign out_c[14:7] = exp[7:0];
+  assign neg_shift = ~({4'b0000, shift}) + 1'b1;
+  assign exp_off = 8'b10000010 + neg_shift;
+  assign exp_sum = a_r[14:7] + b_r[14:7];
+  assign out_c[14:7] = exp_sum + exp_off;
 
   always @(posedge clk) begin
     a_r <= a;
