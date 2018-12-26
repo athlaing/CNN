@@ -8,6 +8,8 @@ import addmult_v2 as v2
 import itertools
 import argparse
 import random
+from datetime import datetime
+random.seed(datetime.now())
 
 parser = argparse.ArgumentParser(description='Check golden versions to make sure they have the same behavior.')
 parser.add_argument("-r","--range", help="number of test cases to run", default=None)
@@ -19,11 +21,10 @@ args = vars(parser.parse_args())
 
 
 num_errors = 0
-
 range     = int(args["range"])
-randomize = args["mix"] == True
 version   = int(args["version"])
-quiet     = args["quiet"] == True
+randomize = args["mix"] == "True"
+quiet     = args["quiet"] == "True"
 counter_a = 0
 counter_b = 0
 
@@ -72,6 +73,9 @@ for a in a_list:
         if (range != None and counter_b < range):
             counter_b += 1
         elif (range != None and counter_b == range):
+            if (not quiet):
+                print("Changing a")
+            counter_b = 0
             break
 
     #counter
