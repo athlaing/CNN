@@ -4,7 +4,7 @@
 # In[215]:
 
 
-class Bfloat:
+class bfloat:
     def __init__(self, sign, exp, man):
         self.sign = [int(sign)]
         exp_container = []
@@ -19,9 +19,11 @@ class Bfloat:
         self.man = man_container
         if len(man_container) != 7:
             print("Error: len(man) != 7")
-    def print_bin(self):
+
+    def display_bin(self):
         print(self.sign, self.exp, self.man)
-    def print(self):
+
+    def display_dec(self):
         man_magnitude = 0.0
         exp_magnitude = sum(self.exp[i] * 2**(7-i) for i in range(0,8))
         start = -1
@@ -78,15 +80,15 @@ def bfloat_mult(a, b):
         diff = 7 - len(o_man)
         extra = [int(x)*0 for x in range(0, diff)]
         o_man = o_man + extra
-    o = Bfloat(o_sign, o_exp, o_man)
+    o = bfloat(o_sign, o_exp, o_man)
     return o
 
 
 # In[218]:
 
 
-a = Bfloat("0", "10000000", "0100011")
-b = Bfloat("1", "10000010", "1110110")
-c = bfloat_mult(a, b)
-c.print()
-c.print_bin()
+# a = bfloat("0", "10000000", "0100011")
+# b = bfloat("1", "10000010", "1110110")
+# c = bfloat_mult(a, b)
+# c.print()
+# c.print_bin()

@@ -20,11 +20,11 @@ class bfloat:
 			if int(a[1:],2) == 0:
 				self.value = 'zero'
 	#end __init___
-	
+
 	def bin_parsed(self):
 		return self.sign, self.exp, self.man
 	#end bin_parsed
-	
+
 	def bin(self):
 		return self.sign + self.exp + self.man
 	#end bin
@@ -41,11 +41,11 @@ class bfloat:
 			return 0.0
 		elif self.value == 'inf':
 			return float('Inf')
-		else: 
+		else:
 			return ((-1)**int(self.sign) * 2**exp_mag * (man_mag + 1))
 	#end mag
-#end class				
-			
+#end class
+
 
 #----------------------------------------------------------------------------------------------
 #add_bin: compressor adder the multiplier's partial sums
@@ -66,9 +66,9 @@ def add_bin(a, b):
 			a = '0' + a
 
 	#A ripple carry adder; a and b should be the same lengths.
-	for i in range(len(a)-1, -1, -1): 
+	for i in range(len(a)-1, -1, -1):
 		#a1, b1 to make the code look cleaner
-		a1 = int(a[i])					
+		a1 = int(a[i])
 		b1 = int(b[i])
 		#Full-adder expressions. The Cout from previous stage becomes Cin of the new stage.
 		add_sum = str(a1^ b1 ^ Cin) + add_sum
@@ -89,7 +89,7 @@ def mult_bfloat16(a, b):
 	o_sign = int(a.sign) ^ int(b.sign)
 	o_sign = bin(o_sign)[2:]
 
-	#Edge cases for +-Inf, +-NaN, +-Zero	
+	#Edge cases for +-Inf, +-NaN, +-Zero
 	#Order of precedence: NaN -> Zero -> Inf
 	if a.value == 'NaN' or b.value == 'NaN':
 		return bfloat(o_sign + '111111110000001')
@@ -104,13 +104,13 @@ def mult_bfloat16(a, b):
 	o_exp = (int(a.exp,2) - 127)  + (int(b.exp,2) - 127)
 
 	#Add the implicit 1 in front of mantissa. See Bfloat16 format.
-	a_man = ('1' + a.man)			
+	a_man = ('1' + a.man)
 	b_man=  ('1' + b.man)
 
 	#Calculate the partial sum of the mantissa
 	o_man = int(a_man,2) * int(b_man,2)
 	o_man = bin(o_man)[2:]
-		
+
 	#Normalize output mantissa, adding the extra exponents, and add the bias
 	o_exp += len(o_man) - (14) - (1)
 	o_exp += 127
@@ -126,14 +126,14 @@ def mult_bfloat16(a, b):
 #---------------------------------------------------------------------------------------------
 
 
-a = bfloat('0100000000100011')
-b = bfloat('1100000101110110')
-c = bfloat('0000000000000000')  # c = 'zero'
-d = bfloat('1111111110000000')  # d = '-inf'
-
-#result should be 11000010011100
-print(mult_bfloat16(a , b).bin_parsed())
-
-print(mult_bfloat16(a , c).bin_parsed())
-print(mult_bfloat16(a , d).bin_parsed())
-print(mult_bfloat16(c , d).bin_parsed())
+# a = bfloat('0000000000000001')
+# b = bfloat('0000000000000001')
+# c = bfloat('0000000000000000')  # c = 'zero'
+# d = bfloat('1111111110000000')  # d = '-inf'
+#
+# #result should be 11000010011100
+# mult_bfloat16(a , b).bin_parsed()
+# #
+# # print(mult_bfloat16(a , c).bin_parsed())
+# # print(mult_bfloat16(a , d).bin_parsed())
+# # print(mult_bfloat16(c , d).bin_parsed())
