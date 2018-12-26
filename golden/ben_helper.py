@@ -17,20 +17,32 @@ class bfloat:
 				else:
 					self.value = 'NaN'
 
-			if int(a,2) == 0:
-				self.value = "zero"
+			if int(a[1:],2) == 0:
+				self.value = 'zero'
 	#end __init___
 	
 	def bin_parsed(self):
 		return self.sign, self.exp, self.man
-	#end bin_seperate
+	#end bin_parsed
 	
 	def bin(self):
 		return self.sign + self.exp + self.man
 	#end bin
 
 	def mag(self):
-		pass #work in progress
+		exp_mag = int(self.exp,2) - 127
+		start = -1
+		man_mag = 0.0
+		for m in self.man:
+			man_mag = man_mag + int(m) * 2 ** (start)
+			start = start - 1
+
+		if self.value == 'zero':
+			return 0.0
+		elif self.value == 'inf':
+			return float('Inf')
+		else: 
+			return ((-1)**int(self.sign) * 2**exp_mag * (man_mag + 1))
 	#end mag
 #end class				
 			
@@ -96,13 +108,8 @@ def mult_bfloat16(a, b):
 	b_man=  ('1' + b.man)
 
 	#Calculate the partial sum of the mantissa
-	o_man = ''
-	for i in range(len(b_man) - 1, -1, -1):
-		if(b_man[i] ==  '1'):
-			o_man = add_bin(o_man, bin( int(a_man,2) << (7 - i))[2:])
-	
-	#alternatively, 
-	#o_man = int(a_man,2) * int(b_man,2)
+	o_man = int(a_man,2) * int(b_man,2)
+	o_man = bin(o_man)[2:]
 		
 	#Normalize output mantissa, adding the extra exponents, and add the bias
 	o_exp += len(o_man) - (14) - (1)
@@ -121,6 +128,12 @@ def mult_bfloat16(a, b):
 
 a = bfloat('0100000000100011')
 b = bfloat('1100000101110110')
+c = bfloat('0000000000000000')  # c = 'zero'
+d = bfloat('1111111110000000')  # d = '-inf'
+
 #result should be 11000010011100
 print(mult_bfloat16(a , b).bin_parsed())
 
+print(mult_bfloat16(a , c).bin_parsed())
+print(mult_bfloat16(a , d).bin_parsed())
+print(mult_bfloat16(c , d).bin_parsed())
