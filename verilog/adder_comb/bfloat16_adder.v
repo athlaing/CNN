@@ -1,4 +1,4 @@
-module bfloat_add_comb(clk, a, b, out);
+module bfloat16_adder(clk, a, b, out);
   input clk;
   input [15:0] a;
   input [15:0] b;
@@ -12,7 +12,7 @@ module bfloat_add_comb(clk, a, b, out);
   reg [9:0] holder_e;
   reg [8:0] result;
   reg [6:0] out_m;
-  reg [6:0] out_e;
+  reg [7:0] out_e;
   wire [9:0] diff_e;
 
   assign a_s = a_r[15];
@@ -120,5 +120,6 @@ module bfloat_add_comb(clk, a, b, out);
   always @(posedge clk) begin
     a_r <= a;
     b_r <= b;
+    out <= out_c;
   end
 endmodule
