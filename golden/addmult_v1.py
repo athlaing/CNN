@@ -68,11 +68,15 @@ def bfloat_mult(a, b):
     o_man = [int(x) for x in bin(o_man_mag)[2:]]
     whole = len(o_man) - 14
     o_exp_mag = a_exp + b_exp + (whole - 1) + 127
+    if o_exp_mag < 0:
+        o_exp_mag = o_exp_mag + 127
     o_exp = [int(x) for x in bin(o_exp_mag)[2:]]
     if len(o_exp) < 8:
-        diff = 8 - len(o_expo)
+        diff = 8 - len(o_exp)
         extra = [int(x)*0 for x in range(0, diff)]
         o_exp = extra + o_exp
+    elif len(o_exp) > 8:
+        o_exp = [int(x)*0 for x in range (0, 8)]
     if len(o_man) > 8:
         o_man = o_man[1:8]
     else:

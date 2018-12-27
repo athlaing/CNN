@@ -67,7 +67,7 @@ try:
                 try:
                     a_v1 = v1.bfloat(str(a[0]),str(a[1:9]),str(a[9:]))
                     b_v1 = v1.bfloat(str(b[0]),str(b[1:9]),str(b[9:]))
-                    c_v1 = v1.bfloat_mult(a_v1,b_v1)
+                    c_v1 = v1.bfloat_mult(a_v1,b_v1).display_bin()
 
                     if(not quiet):
                         print("Version 1: ",c_v1)
