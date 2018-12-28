@@ -66,19 +66,12 @@ def bfloat_mult(a, b):
 		return bfloat(o_sign, '11111111', '0000000')
 
 	#Substrate the bias and add the exponents.
-	if int(a.exp,2) > 0:
-		o_exp = (int(a.exp,2) - 127)  + (int(b.exp,2) - 127)
-	else:
-		o_exp = (int(a.exp,2) - 126)  + (int(b.exp,2) - 126)
-
+	
+	o_exp = (int(a.exp,2) - 127)  + (int(b.exp,2) - 127)
 
 	#normalize
-	a_man = a.man
-	b_man = a.man
-	if int(a.exp,2) > 0:
-	   a_man = ('1' + a.man)
-	if int(b.exp,2) > 0:
-	   b_man=  ('1' + b.man)
+	a_man = '1' + a.man
+	b_man = '1' + b.man
 
 	o_man = int(a_man,2) * int(b_man,2)
 	o_man = bin(o_man)[2:]
@@ -99,10 +92,10 @@ def bfloat_mult(a, b):
 	return bfloat(o_sign, o_exp, o_man)
 # end mult_bfloat()----------------------------------------------------------------------------
 
-a = bfloat('0', '00000001', '1000100')
+a = bfloat('0', '00000000', '1111000')
+b = bfloat('0', '01111111', '0000110')
 print(a.display_dec())
-
-print(mult_bfloat16(a, a).display_dec())
-print(a.display_dec() * a.display_dec())
-
+print(b.display_dec())
+print(bfloat_mult(a, b).display_dec())
+print(a.display_dec() * b.display_dec())
 
