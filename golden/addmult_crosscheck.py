@@ -80,12 +80,12 @@ try:
             #version 2
             if (version == 0 or version == 2):
                 try:
-                    a_v2 = v2.bfloat(a)
-                    b_v2 = v2.bfloat(b)
-                    c_v2 = v2.mult_bfloat16(a_v2, b_v2).bin_parsed()
+                    a_v2 = v2.bfloat(str(a[0]),str(a[1:9]),str(a[9:]))
+                    b_v2 = v2.bfloat(str(b[0]),str(b[1:9]),str(b[9:]))
+                    c_v2 = v2.bfloat_mult(a_v2,b_v2).display_bin()
 
                     if(not quiet):
-                        print("Version 2: ",c_v2)
+                        print("Version 2: ", c_v2)
                         print("="*15)
                 except Exception as e:
                     if (strict):
