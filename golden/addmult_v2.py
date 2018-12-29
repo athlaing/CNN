@@ -36,11 +36,13 @@ class bfloat:
 			if self.man == '0000000':
 				return 0.0
 			else: 
-				return ((-1)**int(self.sign) * 2**(exp_mag - 126) * (man_mag)) 
+				out = ((-1)**int(self.sign) * 2**(exp_mag - 126) * (man_mag)) 
+				return (out)
 		elif self.value == 'inf':
 			return float('Inf')
 		else:
-			return ((-1)**int(self.sign) * 2**(exp_mag - 127) * (man_mag + 1))
+			out = ((-1)**int(self.sign) * 2**(exp_mag - 127) * (man_mag + 1))
+			return (out)
 	#end mag
 #end class
 #----------------------------------------------------------------------------------------------
@@ -66,25 +68,33 @@ def bfloat_mult(a, b):
 		return bfloat(o_sign, '11111111', '0000000')
 
 	#Substrate the bias and add the exponents.
-	
 	o_exp = (int(a.exp,2) - 127)  + (int(b.exp,2) - 127)
 
 	#normalize
 	a_man = '1' + a.man
 	b_man = '1' + b.man
 
+	if a.exp == '00000000':
+		a_man = a.man
+	if b.exp == '00000000':
+		b_man = b.man
+
 	o_man = int(a_man,2) * int(b_man,2)
 	o_man = bin(o_man)[2:]
 
 	#Normalize output mantissa, adding the extra exponents, and add the bias
-	o_exp += len(o_man) - (14) - (1)
+	dec_len =(len(a_man) - 1) + (len(b_man) - 1)
 	o_exp += 127
+	if len(o_man) <= dec_len + 1 and o_exp == 0:
+		o_man = o_man.rjust(15,'0')
+	else:
+		o_exp += len(o_man) - (dec_len) - (1)
 
-	if o_exp < 0: 
-		o_exp = 0
+	if o_exp <= 0: 
+		return bfloat(o_sign, '0'*8, '0'*7)
 
-	if o_exp > 255:  #if o_exp > '1111_1111'
-		o_exp = 255
+	if o_exp >= 255:  #if o_exp > '1111_1111'
+		return bfloat(o_sign, '1'*8, '0'*7)
 
 	o_exp = bin(o_exp)[2:].rjust(8, '0')
 	o_man = o_man[1:8].ljust(7, '0')
@@ -92,10 +102,10 @@ def bfloat_mult(a, b):
 	return bfloat(o_sign, o_exp, o_man)
 # end mult_bfloat()----------------------------------------------------------------------------
 
-a = bfloat('0', '00000000', '1111000')
-b = bfloat('0', '01111111', '0000110')
-print(a.display_dec())
-print(b.display_dec())
-print(bfloat_mult(a, b).display_dec())
-print(a.display_dec() * b.display_dec())
+# a = bfloat('0', '10010111', '0100011')
+# b = bfloat('0', '11110101', '0110010')
+# print(a.display_dec())
+# print(b.display_dec())
+# print(bfloat_mult(a, b).display_dec())
+# print(a.display_dec() * b.display_dec())
 
