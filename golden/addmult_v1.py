@@ -21,7 +21,10 @@ class bfloat:
             print("Error: len(man) != 7")
 
     def display_bin(self):
-        print(self.sign, self.exp, self.man)
+         retlist = (''.join([str(x) for x in self.sign]),
+                    ''.join([str(x) for x in self.exp]),
+                    ''.join([str(x) for x in self.man]))
+         return retlist
 
     def display_dec(self):
         man_magnitude = 0.0

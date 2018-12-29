@@ -24,13 +24,15 @@ args = vars(parser.parse_args())
 
 error_v1  = 0
 error_v2  = 0
-error_comp= 0
+error_s   = 0
+error_e   = 0
+error_m   = 0
 version   = int(args["version"])
 randomize = args["mix"] == "True"
 quiet     = args["quiet"] == "True"
 strict    = args["strict"] == "True"
-counter_a = 0
-counter_b = 0
+counter = 0
+interrupt = False
 
 if (args["range"] == None):
     range = -1
@@ -52,11 +54,10 @@ if(randomize):
 try:
     for a in a_list[:range]:
         a = ''.join([str(x) for x in a])
-        counter_a += 1
 
         for b in b_list[:range]:
             b = ''.join([str(x) for x in b])
-            counter_b += 1
+            counter += 1
 
             if(not quiet):
                 print("a = "+a)
@@ -95,14 +96,52 @@ try:
 
             #compare 2 versions:
             if (version == 0):
-                pass #pass for now, both versions doesnt work
+                sign_pred = c_v1[0] == c_v2[0]
+                exp_pred  = c_v1[1] == c_v2[1]
+                man_pred  = c_v1[2] == c_v2[2]
+                pred = sign_pred and exp_pred and man_pred
+                
+                if (strict and not pred):
+                    assert sign_pred, "Sign bit is different"
+                    assert exp_pred, "Exp bits are different"
+                    assert man_pred, "Man bits are different"
+                    
+                if (not sign_pred):
+                    error_s += 1
+                    if(not quiet):
+                        print ("Wrong sign: v1: " + str(c_v1[0]) + " v2 "+ str(c_v2[0]))
+                if (not exp_pred):
+                    error_e += 1
+                    if(not quiet):
+                        print ("Wrong exp: v1: " + str(c_v1[1]) + " v2 "+ str(c_v2[1]))
+                if (not man_pred):
+                    error_m += 1
+                    if(not quiet):
+                        print ("Wrong sign: v1: " + str(c_v1[2]) + " v2 "+ str(c_v2[2]))
+                        
 
 except KeyboardInterrupt:
-    print("="*15)
-    print("Percentage of pass test case version 1: " + str((counter_a*counter_b-error_v1)/(counter_a*counter_b)*100) + "% out of " + str(counter_a*counter_b) + " tests")
-    print("Percentage of pass test case version 2: " + str((counter_a*counter_b-error_v2)/(counter_a*counter_b)*100) + "% out of " + str(counter_a*counter_b) + " tests")
+    interrupt = True
+    print("="*50)
+    if (version == 1 or version == 0):
+        print("Percentage of pass test case version 1: " + str((counter-error_v1)/(counter)*100) + "% out of " + str(counter) + " tests")
+    if (version == 2 or version == 0):
+        print("Percentage of pass test case version 2: " + str((counter-error_v2)/(counter)*100) + "% out of " + str(counter) + " tests")
+    if (version == 0): 
+        print("Percentage of pass test case correct s: " + str((counter-error_s)/(counter)*100) + "% out of " + str(counter) + " tests")
+        print("Percentage of pass test case correct e: " + str((counter-error_e)/(counter)*100) + "% out of " + str(counter) + " tests")
+        print("Percentage of pass test case correct m: " + str((counter-error_m)/(counter)*100) + "% out of " + str(counter) + " tests")
+    print("="*50)
 
-if (version == 1):
-    print("Percentage of pass test case version 1: " + str((num_test-error_v1)/num_test*100) + "% out of " + str(num_test) + " tests")
-if (version == 2):
-    print("Percentage of pass test case version 2: " + str((num_test-error_v2)/num_test*100) + "% out of " + str(num_test) + " tests")
+
+if(not interrupt):
+    print("="*50)
+    if (version == 1 or version == 0):
+        print("Percentage of pass test case version 1: " + str((num_test-error_v1)/num_test*100) + "% out of " + str(num_test) + " tests")
+    if (version == 2 or version == 0):
+        print("Percentage of pass test case version 2: " + str((num_test-error_v2)/num_test*100) + "% out of " + str(num_test) + " tests")
+    if (version == 0): 
+        print("Percentage of pass test case correct s: " + str((num_test-error_s)/num_test*100) + "% out of " + str(num_test) + " tests")
+        print("Percentage of pass test case correct e: " + str((num_test-error_e)/num_test*100) + "% out of " + str(num_test) + " tests")
+        print("Percentage of pass test case correct m: " + str((num_test-error_m)/num_test*100) + "% out of " + str(num_test) + " tests")
+    print("="*50)       

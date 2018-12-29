@@ -21,7 +21,7 @@ class bfloat:
 	#end __init___
 
 	def display_bin(self):
-		return self.sign, self.exp, self.man
+		return (self.sign, self.exp, self.man)
 	#end bin_parsed
 
 	def display_dec(self):
