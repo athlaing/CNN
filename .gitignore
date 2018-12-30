@@ -1,6 +1,10 @@
 /*data
 build*
-VISOinterface/ftd2xx.dll
-VISOinterface/ftd2xx.h
-VISOinterface/ftd2xx.lib
-VISOinterface/VISOinterface.pro.user
+VISIOinterface/ftd2xx.dll
+VISIOinterface/ftd2xx.h
+VISIOinterface/ftd2xx.lib
+VISIOinterface/VISIOinterface.pro.user
+VISIOinterface_HW/*
+!VISIOinterface_HW/*/HDL
+!VISIOinterface_HW/VISIOinterface.qpf
+!VISIOinterface_HW/VISIOinterface.qsf
