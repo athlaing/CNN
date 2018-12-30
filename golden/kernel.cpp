@@ -47,8 +47,9 @@ float kernel(int kernel_size, float* input, float* weight) {
     cout << arr[i] << " ";
     count++;
   }
+  cout << endl;
   delete [] arr;
-  return 1;
+  return arr[array_size - 1];
 }
 
 
@@ -59,6 +60,7 @@ int main() {
     input[i] = i;
     weight[i] = i;
   }
-  kernel(3, input, weight);
+  float sum = kernel(3, input, weight);
+  cout << sum << endl;
   return 0;
 }
