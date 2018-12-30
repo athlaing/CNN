@@ -129,14 +129,14 @@ def bfloat_add(a, b):
         b_man = "1" + b.man
         b_exp = int(b.exp, 2) - 127
     diff = int(a.exp, 2) - int(b.exp, 2)
-    print(diff)
+    #print(diff)
     if(diff > 0):
         b_man = int(b_man, 2) >> diff
         a_man = int(a_man, 2)
         b_exp = a_exp
     elif(diff < 0):
         a_man = int(a_man, 2) >> (-diff)
-        print(a_man)
+        #print(a_man)
         b_man = int(b_man, 2)
         a_exp = b_exp
     if(a.sign == b.sign): 
@@ -145,7 +145,7 @@ def bfloat_add(a, b):
         out_man = b_man - a_man
     elif(a.sign == "0" and b.sign == "1"):
         out_man = a_man - b_man
-    print(out_man)
+    #print(out_man)
     if len(bin(out_man)[2:]) > 8:
         shift_amt = len(bin(out_man)[2:]) - 8
         out_man = out_man >> shift_amt
@@ -166,7 +166,7 @@ def bfloat_add(a, b):
         out_man = (-1)*out_man
     else:
         out_sign = "0"
-    print(bin(out_man))
+    #print(bin(out_man))
     return bfloat(out_sign, out_exp, bin(out_man)[3:])
 
 # a = bfloat('0','01011000','0010110')

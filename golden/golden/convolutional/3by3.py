@@ -16,7 +16,6 @@ class kernel:
         
         for i in range(9):
             self.pp.append(self.mult(self.weights[i],img[i]))
-        import IPython; IPython.embed()
         self.out[0] = self.add(self.pp[0], self.pp[1])
         self.out[1] = self.add(self.pp[2], self.pp[3])
         self.out[2] = self.add(self.pp[4], self.pp[5])
@@ -27,7 +26,7 @@ class kernel:
         
         return self.out[6]
     
-    def disp_tree(self, form="dec"):
+    def display_tree(self, form="dec"):
         
         if (form == "bin"):
             elements = [x.display_bin() for x in self.out]
@@ -36,10 +35,12 @@ class kernel:
         else:
             print("ERROR: choose <bin> or <dec>")
             
+        print ("="*15+" Add tree "+"="*15)            
         print (elements)
         print (elements[0],elements[1],elements[2],elements[3])
         print (elements[4],elements[5])
         print (elements[6])        
+        print ("="*40)
         
 #============================== DEBUG TEST ====================================
 import random
