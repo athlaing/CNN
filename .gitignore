@@ -1,1 +1,6 @@
 /*data
+build*
+VISOinterface/ftd2xx.dll
+VISOinterface/ftd2xx.h
+VISOinterface/ftd2xx.lib
+VISOinterface/VISOinterface.pro.user
