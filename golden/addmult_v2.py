@@ -90,9 +90,12 @@ def bfloat_mult(a, b):
 	else:
 		o_exp += len(o_man) - (dec_len) - (1)
 
-	if o_exp <= 0: 
-		return bfloat(o_sign, '0'*8, '0'*7)
-
+	#shift mantissa to right to accomudate for negative exp 
+	if o_exp < 0: 
+		o_man = '0'*(-o_exp) + o_man
+		o_man = o_man[0:7].ljust(7, '0')
+		return bfloat(o_sign, '0'*8, o_man)
+		
 	if o_exp >= 255:  #if o_exp > '1111_1111'
 		return bfloat(o_sign, '1'*8, '0'*7)
 
@@ -102,10 +105,9 @@ def bfloat_mult(a, b):
 	return bfloat(o_sign, o_exp, o_man)
 # end mult_bfloat()----------------------------------------------------------------------------
 
-# a = bfloat('0', '10010111', '0100011')
-# b = bfloat('0', '11110101', '0110010')
-# print(a.display_dec())
-# print(b.display_dec())
+# a = bfloat('0','01011000','0010110')
+# b = bfloat('1','00100011','0101100')
+# print(a.display_bin(), "----", a.display_dec())
+# print(b.display_bin(), "----", b.display_dec())
 # print(bfloat_mult(a, b).display_dec())
 # print(a.display_dec() * b.display_dec())
-
