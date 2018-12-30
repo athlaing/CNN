@@ -35,15 +35,14 @@ class bfloat:
             start = start - 1
         if self.exp == [0, 0, 0, 0, 0, 0, 0, 0]:
             if self.man == [0, 0, 0, 0, 0, 0, 0]:
-                print(0.0)
+                return 0.0
             else:
-
-                print((-1)**self.sign[0] * 2**(-126) * man_magnitude)
+                return (-1)**self.sign[0] * 2**(-126) * man_magnitude
         elif self.exp == [1, 1, 1, 1, 1, 1, 1, 1]:
-            print(float('Inf'))
+            return float('Inf')
 
         else:
-            print((-1)**self.sign[0] * 2**(exp_magnitude - 127) * (man_magnitude + 1))
+            return (-1)**self.sign[0] * 2**(exp_magnitude - 127) * (man_magnitude + 1)
 
 
 # In[216]:
