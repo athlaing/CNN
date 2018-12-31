@@ -1,0 +1,45 @@
+module mult_comb_vt;
+	reg [15:0] a;
+	reg [15:0] b;
+	wire [15:0] out;
+	reg clk;
+	bfloat16_mult test(.clk(clk), .a(a), .b(b), .out(out));
+	integer fout;
+
+	initial begin
+		clk = 0;
+		fout = $fopen("mult_out.csv", "w");
+
+		a = 16'b1011001101111101;
+		b = 16'b1001101001011000;
+		#20
+
+		a = 16'b1011001101111101;
+		b = 16'b0010001100100011;
+		#20
+
+		a = 16'b0010100010010111;
+		b = 16'b1001101001011000;
+		#20
+
+		a = 16'b0010100010010111;
+		b = 16'b0010001100100011;
+		#20
+
+		#20;
+		#20;
+		$fclose(fout);
+		$finish;
+
+	end
+
+	always begin
+		clk = ~clk;
+		#10;
+	end
+
+	always begin
+		$fwrite(fout, "%b,%b,%b\n", a, b, out);
+		#20;
+	end
+endmodule
