@@ -91,5 +91,5 @@ i.append(alu.bfloat("1","00010100","1011101"))
 
 test_kernel = kernel(w)
 test_kernel.dot(i)
-test_kernel.display_tree(form='dec')
+test_kernel.display_tree(form='bin')
 #========================== END DEBUG TEST ====================================
