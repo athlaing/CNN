@@ -22,7 +22,11 @@ class bfloat:
 
 	def display_bin(self):
 		return (self.sign, self.exp, self.man)
-	#end bin_parsed
+	#end display_bin()
+	
+	def bin(self):
+		return self.sign + self.exp + self.man
+	#end bin()
 
 	def display_dec(self):
 		exp_mag = int(self.exp,2)
@@ -46,6 +50,9 @@ class bfloat:
 	#end mag
 #end class
 #----------------------------------------------------------------------------------------------
+
+def bin_parser(a):
+	return a[0] , a[1:9] , a[9:]
 
 #mult_bfloat16:
 #   input: (a, b) two 16bit binary string in Bfloat16 format, where a[0], b[0] are the MSBs
