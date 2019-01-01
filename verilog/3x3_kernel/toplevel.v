@@ -79,9 +79,9 @@ assign HEX0 = ~7'b0111111;
 
 reg [15:0] w0, w1, w2, w3, w4, w5, w6, w7, w8;
 reg [15:0] i0, i1, i2, i3, i4, i5, i6, i7, i8;
-reg [15:0] holder0, holder1, holder2;
+reg [15:0] holder0, holder1, holder2, debug_out;
 wire [15:0] pp0, pp1, pp2, pp3, pp4, pp5, pp6, pp7, pp8;
-wire [15:0] out0, out1, out2, out3, out4, out5, out6;
+wire [15:0] out0, out1, out2, out3, out4, out5, out6, out7;
 
 bfloat16_mult mtest0(.clk(CLOCK_50), .a(w0), .b(i0), .out(pp0));
 bfloat16_mult mtest1(.clk(CLOCK_50), .a(w1), .b(i1), .out(pp1));
@@ -100,7 +100,9 @@ bfloat16_adder atest3(.clk(CLOCK_50), .a(pp6), .b(pp7), .out(out3));
 bfloat16_adder atest4(.clk(CLOCK_50), .a(out0), .b(out1), .out(out4));
 bfloat16_adder atest5(.clk(CLOCK_50), .a(out2), .b(out3), .out(out5));
 bfloat16_adder atest6(.clk(CLOCK_50), .a(out4), .b(out5), .out(out6));
-bfloat16_adder atest7(.clk(CLOCK_50), .a(out6), .b(holder2), .out(LEDR[15:0]));
+bfloat16_adder atest7(.clk(CLOCK_50), .a(out6), .b(holder2), .out(out7));
+
+assign LEDR[15:0] = debug_out;
 
 always @(posedge CLOCK_50) begin
 	holder0 <= pp6;
@@ -148,6 +150,34 @@ always @(posedge CLOCK_50) begin
 		i6 <= 16'b1101010101110010;
 		i7 <= 16'b0001010010010000;
 		i8 <= 16'b1110010100101011;
+	end		
+	
+	if(SW[8:0] == 9'b000000001) begin
+	 debug_out <= pp0;
+	end
+	if(SW[8:0] == 9'b000000010) begin
+	 debug_out <= pp1;
+	end
+	if(SW[8:0] == 9'b000000100) begin
+	 debug_out <= pp2;
+	end
+	if(SW[8:0] == 9'b000001000) begin
+	 debug_out <= pp3;
+	end
+	if(SW[8:0] == 9'b000010000) begin
+	 debug_out <= pp4;
+	end
+	if(SW[8:0] == 9'b000100000) begin
+	 debug_out <= pp5;
+	end
+	if(SW[8:0] == 9'b001000000) begin
+	 debug_out <= pp6;
+	end
+	if(SW[8:0] == 9'b010000000) begin
+	 debug_out <= pp7;
+	end
+	if(SW[8:0] == 9'b100000000) begin
+	 debug_out <= pp8;
 	end
 end
 
