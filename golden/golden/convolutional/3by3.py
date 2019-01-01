@@ -13,7 +13,7 @@ class kernel:
         self.out  = [0,0,0,0,0,0,0,0]
 
     def dot(self, img):
-
+        self.img = img
         for i in range(9):
             self.pp.append(self.mult(self.weights[i],img[i]))
 
@@ -32,16 +32,32 @@ class kernel:
 
         out = None
         pp = None
+        w = None
+        i = None
 
         if (form == "bin"):
             pp  = [x.display_bin() for x in self.pp]
             out = [x.display_bin() for x in self.out]
+            w   = [x.display_bin() for x in self.weights]
+            i   = [x.display_bin() for x in self.img]
         elif (form == "dec"):
             pp = [x.display_dec() for x in self.pp]
             out = [x.display_dec() for x in self.out]
+            w   = [x.display_dec() for x in self.weights]
+            i   = [x.display_dec() for x in self.img]
         else:
             print("ERROR: choose <bin> or <dec>")
-
+            
+        print ("="*15+" Multiply "+"="*15)
+        print (str(w[0]) + ' * ' + str(i[0]) + ' = ' + str(pp[0]))
+        print (str(w[1]) + ' * ' + str(i[1]) + ' = ' + str(pp[1]))
+        print (str(w[2]) + ' * ' + str(i[2]) + ' = ' + str(pp[2]))
+        print (str(w[3]) + ' * ' + str(i[3]) + ' = ' + str(pp[3]))
+        print (str(w[4]) + ' * ' + str(i[4]) + ' = ' + str(pp[4]))
+        print (str(w[5]) + ' * ' + str(i[5]) + ' = ' + str(pp[5]))
+        print (str(w[6]) + ' * ' + str(i[6]) + ' = ' + str(pp[6]))
+        print (str(w[7]) + ' * ' + str(i[7]) + ' = ' + str(pp[7]))
+        print (str(w[8]) + ' * ' + str(i[8]) + ' = ' + str(pp[8]))
         print ("="*15+" Add tree "+"="*15)
         print (pp)
         print (out[0],out[1],out[2],out[3], pp[8])
@@ -75,5 +91,5 @@ i.append(alu.bfloat("1","00010100","1011101"))
 
 test_kernel = kernel(w)
 test_kernel.dot(i)
-test_kernel.display_tree(form='bin')
+test_kernel.display_tree(form='dec')
 #========================== END DEBUG TEST ====================================
