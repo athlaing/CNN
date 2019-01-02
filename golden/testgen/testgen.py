@@ -1,13 +1,14 @@
 #Testbench generator for mult and adder
 #
 #TODO: testgen for adder
-#      reference gen with addmult_v2
+#      option for which golden version to use
 
+import sys
+sys.path.append('../golden/basic_logic')
 import itertools
 import random
 import argparse
 import addmult_v2 as v2
-
 
 parser = argparse.ArgumentParser(description='Generate testbench files for mult_comb.v and add_comb.v')
 parser.add_argument("-r","--range", help="number of test cases to run", default=2)
