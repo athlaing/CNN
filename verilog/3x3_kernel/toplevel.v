@@ -150,34 +150,66 @@ always @(posedge CLOCK_50) begin
 		i6 <= 16'b1101010101110010;
 		i7 <= 16'b0001010010010000;
 		i8 <= 16'b1110010100101011;
-	end		
-	
+	end
+//=======================================================
+//  Debugging partial product
+//=======================================================
+
+	//if(SW[8:0] == 9'b000000001) begin
+	 //debug_out <= pp0;
+	//end
+	//if(SW[8:0] == 9'b000000010) begin
+	 //debug_out <= pp1;
+	//end
+	//if(SW[8:0] == 9'b000000100) begin
+	 //debug_out <= pp2;
+	//end
+	//if(SW[8:0] == 9'b000001000) begin
+	 //debug_out <= pp3;
+	//end
+	//if(SW[8:0] == 9'b000010000) begin
+	 //debug_out <= pp4;
+	//end
+	//if(SW[8:0] == 9'b000100000) begin
+	 //debug_out <= pp5;
+	//end
+	//if(SW[8:0] == 9'b001000000) begin
+	 //debug_out <= pp6;
+	//end
+	//if(SW[8:0] == 9'b010000000) begin
+	 //debug_out <= pp7;
+	//end
+	//if(SW[8:0] == 9'b100000000) begin
+	 //debug_out <= pp8;
+	//end
+
+//=======================================================
+//  Debugging adders
+//=======================================================
+
 	if(SW[8:0] == 9'b000000001) begin
-	 debug_out <= pp0;
+	 debug_out <= out0;
 	end
 	if(SW[8:0] == 9'b000000010) begin
-	 debug_out <= pp1;
+	 debug_out <= out1;
 	end
 	if(SW[8:0] == 9'b000000100) begin
-	 debug_out <= pp2;
+	 debug_out <= out2;
 	end
 	if(SW[8:0] == 9'b000001000) begin
-	 debug_out <= pp3;
+	 debug_out <= out3;
 	end
 	if(SW[8:0] == 9'b000010000) begin
-	 debug_out <= pp4;
+	 debug_out <= out4;
 	end
 	if(SW[8:0] == 9'b000100000) begin
-	 debug_out <= pp5;
+	 debug_out <= out5;
 	end
 	if(SW[8:0] == 9'b001000000) begin
-	 debug_out <= pp6;
+	 debug_out <= out6;
 	end
 	if(SW[8:0] == 9'b010000000) begin
-	 debug_out <= pp7;
-	end
-	if(SW[8:0] == 9'b100000000) begin
-	 debug_out <= pp8;
+	 debug_out <= out7;
 	end
 end
 
