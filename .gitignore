@@ -5,6 +5,8 @@ VISIOinterface/ftd2xx.h
 VISIOinterface/ftd2xx.lib
 VISIOinterface/VISIOinterface.pro.user
 VISIOinterface_HW/*
-!VISIOinterface_HW/*/HDL
+!VISIOinterface_HW/HDL
+VISIOinterface_HW/HDL/*.bak
+VISIOinterface_HW/HDL/**/*.bak
 !VISIOinterface_HW/VISIOinterface.qpf
 !VISIOinterface_HW/VISIOinterface.qsf
