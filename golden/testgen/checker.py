@@ -26,7 +26,7 @@ else:
 		if lvt[i] != lref[i]:
 			error += 1
 			errorContent.append("Mismatch at Line " + str(i + 1) + 
-				": " + lvt[i] + ' '*22 + lref[i])
+				": " + " mult_out: " + lvt[i] + ' '*22 + " mult_ref: " + lref[i])
 
 print("Total Number of mismatches: " + str(error))
 if write2file:
