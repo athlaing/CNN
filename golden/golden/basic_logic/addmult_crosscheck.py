@@ -48,6 +48,9 @@ else:
 a_list = list(itertools.product([0,1], repeat=16))
 b_list = list(itertools.product([0,1], repeat=16))
 
+bfloat_min = v2.bfloat('0', '00000000' , '0000001').display_dec()
+bfloat_max = v2.bfloat('0', '11111110' , '1111111').display_dec()
+
 if (range != -1):
     num_test = range ** 2
 else:
@@ -85,7 +88,7 @@ try:
                         a_32 = v1.bfloat(str(a[0]),str(a[1:9]),str(a[9:])).display_dec()
                         b_32 = v1.bfloat(str(b[0]),str(b[1:9]),str(b[9:])).display_dec()
                         c_32 = a_32 * b_32
-                        diff_v1 = abs((c_32-c_16_v1)/c_32) 
+                        diff_v1 = abs((c_32-c_16_v1)/(c_32+ (.0000005))) 
                         if (diff_v1 >= epsilon):
                             if (strict):
                                 assert False, "error larger than epsilon"
@@ -119,7 +122,14 @@ try:
                         a_32 = v2.bfloat(str(a[0]),str(a[1:9]),str(a[9:])).display_dec()
                         b_32 = v2.bfloat(str(b[0]),str(b[1:9]),str(b[9:])).display_dec()
                         c_32 = a_32 * b_32
-                        diff_v2 = abs((c_32-c_16_v2)/c_32)
+                        
+                        if c_32 == 0.0:
+                            diff_v2 = 0.0
+                        elif c_32 < bfloat_min and c_16_v2 == 0.0:
+                            diff_v2 = 0.0
+                        else:
+                            diff_v2 = abs((c_32-c_16_v2)/(c_32))
+
                         if (diff_v2 >= epsilon):
                             if (strict):
                                 assert False, "error larger than epsilon"

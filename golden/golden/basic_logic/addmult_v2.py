@@ -1,5 +1,5 @@
 #Python program for bfloat16, a truncated mantissa version of IEEE 754 float32
-
+from numpy import float32
 class bfloat:
 	def __init__(self, s, e, m):
 		if len(s) + len(e) + len(m) != 16:
@@ -38,15 +38,18 @@ class bfloat:
 
 		if self.exp == '00000000':
 			if self.man == '0000000':
-				return 0.0
+				if(self.sign == '1'):
+					return -0.0
+				else:
+					return 0.0
 			else: 
 				out = ((-1)**int(self.sign) * 2**(exp_mag - 126) * (man_mag)) 
-				return (out)
+				return (float32(out))
 		elif self.value == 'inf':
-			return float('Inf')
+			return float(int(self.sign)*'-' +'Inf')
 		else:
 			out = ((-1)**int(self.sign) * 2**(exp_mag - 127) * (man_mag + 1))
-			return (out)
+			return (float32(out))
 	#end mag
 #end class
 #----------------------------------------------------------------------------------------------
@@ -93,12 +96,13 @@ def bfloat_mult(a, b):
 	dec_len =(len(a_man) - 1) + (len(b_man) - 1)
 	o_exp += 127
 	if len(o_man) <= dec_len + 1 and o_exp == 0:
-		o_man = o_man.rjust(15,'0')
+		o_man = o_man.rjust(14,'0')
 	else:
 		o_exp += len(o_man) - (dec_len) - (1)
 
+
 	#shift mantissa to right to accomudate for negative exp 
-	if o_exp < 0: 
+	if o_exp <= 0: 
 		o_man = '0'*(-o_exp) + o_man
 		o_man = o_man[0:7].ljust(7, '0')
 		return bfloat(o_sign, '0'*8, o_man)
@@ -176,9 +180,16 @@ def bfloat_add(a, b):
     #print(bin(out_man))
     return bfloat(out_sign, out_exp, bin(out_man)[3:])
 
-# a = bfloat('0','01011000','0010110')
-# b = bfloat('1','00100011','0101100')
-# print(a.display_bin(), "----", a.display_dec())
-# print(b.display_bin(), "----", b.display_dec())
-# print(bfloat_mult(a, b).display_dec())
-# print(a.display_dec() * b.display_dec())
+###############################################################
+# a = bfloat(*bin_parser("0000000000111011"))
+# b = bfloat(*bin_parser("1011111110010010"))
+# result = bfloat_mult(a,b).display_dec()
+# f32ab = a.display_dec() * b.display_dec() 
+
+# print("reference a: ", a.display_dec())
+# print("reference b: ", b.display_dec())
+# print("float32 a*b : ", f32ab)
+# print("mult_out   : ", result)
+# diff = (f32ab - result)/f32ab
+# print(diff)
+
