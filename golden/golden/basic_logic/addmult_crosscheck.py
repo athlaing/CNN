@@ -125,7 +125,9 @@ try:
                         
                         if c_32 == 0.0:
                             diff_v2 = 0.0
-                        elif c_32 < bfloat_min and c_16_v2 == 0.0:
+                        elif abs(c_32) < abs(bfloat_min) and c_16_v2 == 0.0:
+                            diff_v2 = 0.0
+                        elif abs(c_32) == float("Inf") or abs(c_16_v2) == float("Inf"):
                             diff_v2 = 0.0
                         else:
                             diff_v2 = abs((c_32-c_16_v2)/(c_32))
