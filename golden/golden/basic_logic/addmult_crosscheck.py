@@ -88,7 +88,7 @@ try:
                         a_32 = v1.bfloat(str(a[0]),str(a[1:9]),str(a[9:])).display_dec()
                         b_32 = v1.bfloat(str(b[0]),str(b[1:9]),str(b[9:])).display_dec()
                         c_32 = a_32 * b_32
-                        diff_v1 = abs((c_32-c_16_v1)/(c_32+ (.0000005))) 
+                        diff_v1 = abs((c_32-c_16_v1)/c_32+) 
                         if (diff_v1 >= epsilon):
                             if (strict):
                                 assert False, "error larger than epsilon"
