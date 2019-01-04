@@ -123,9 +123,7 @@ try:
                         b_32 = v2.bfloat(str(b[0]),str(b[1:9]),str(b[9:])).display_dec()
                         c_32 = a_32 * b_32
                         
-                        if c_32 == 0.0:
-                            diff_v2 = 0.0
-                        elif abs(c_32) < abs(bfloat_min) and c_16_v2 == 0.0:
+                        if abs(c_32) == 0.0 or abs(c_16_v2) == 0.0:
                             diff_v2 = 0.0
                         elif abs(c_32) == float("Inf") or abs(c_16_v2) == float("Inf"):
                             diff_v2 = 0.0
