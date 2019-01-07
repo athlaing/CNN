@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
 } // MainWindow()
 
 MainWindow::~MainWindow() {
+    CloseFTDI();
     delete ui;
 } // ~MainWindow()
 
@@ -21,7 +22,50 @@ MainWindow::~MainWindow() {
 void  MainWindow::InitializeWin() {
     // change window title
     this->setWindowTitle(QString("VISIOinterface"));
-
+    // create new menu and action items
+    QMenu* portMenu = ui->menuBar->addMenu(tr("Port Setup"));
+    QAction* setupFTDI = new QAction(tr("Setup Port"), this);
+    QAction* closeFTDI = new QAction(tr("Close Port"), this);
+    // insert action items to menu
+    portMenu->addAction(setupFTDI);
+    portMenu->addAction(closeFTDI);
+    // connect action items to functions
+    connect(setupFTDI, SIGNAL(triggered()),
+            this, SLOT(InitializeFTDI()));
+    connect(closeFTDI, SIGNAL(triggered()),
+            this, SLOT(CloseFTDI()));
+    // sets action for toggling binary,dec, hex
+    connect(ui->Binary_B, SIGNAL(toggled(bool)),
+            this, SLOT(DisplayTypeChanged(bool)));
+    connect(ui->Dec_B, SIGNAL(toggled(bool)),
+            this, SLOT(DisplayTypeChanged(bool)));
+    connect(ui->Hex_B, SIGNAL(toggled(bool)),
+            this, SLOT(DisplayTypeChanged(bool)));
+    connect(ui->BinaryR_B, SIGNAL(toggled(bool)),
+            this, SLOT(DisplayTypeChanged(bool)));
+    connect(ui->DecR_B, SIGNAL(toggled(bool)),
+            this, SLOT(DisplayTypeChanged(bool)));
+    connect(ui->HexR_B, SIGNAL(toggled(bool)),
+            this, SLOT(DisplayTypeChanged(bool)));
+    ui->Binary_B->setChecked(true);
+    ui->BinaryR_B->setChecked(true);
+    // connects for settings values and setting
+    memset(TxBuffer, '\0', 256);
+    memset(RxBuffer, '\0', 256);
+    connect(ui->Value, SIGNAL(valueChanged(int)),
+            this, SLOT(SendValueUpdated(int)));
+    connect(ui->Index, SIGNAL(valueChanged(int)),
+            this, SLOT(SendIndexUpdated(int)));
+    // connects for sending and writing
+    connect(ui->SendByte, SIGNAL(clicked()),
+            this, SLOT(SendToFPGA()));
+    connect(ui->SendByteStream, SIGNAL(clicked()),
+            this, SLOT(SendToFPGA()));
+    // connects for Reading
+    connect(ui->ReadFromFPGA_B, SIGNAL(clicked()),
+            this, SLOT(ReadFromFPGA()));
+    connect(ui->IndexR, SIGNAL(valueChanged(int)),
+            this, SLOT(ReadIndexUpdated(int)));
 } // InitializeWin
 
 /******************************************************************************
@@ -115,4 +159,61 @@ void MainWindow::SendToFPGA() {
     } // write complete
 } // SendToFPGA
 
+/******************************************************************************
+ * void DisplayTypeChanged()
+ * Changes the display type of the value button in the fpga w/r category
+ * ***************************************************************************/
+void MainWindow::DisplayTypeChanged(bool) {
+    if(ui->Binary_B->isChecked() == true) {
+        ui->Value->setDisplayIntegerBase(2);
+    } // set display to binary
+    else if(ui->Hex_B->isChecked() == true) {
+        ui->Value->setDisplayIntegerBase(16);
+    } // set display to hex
+    else if(ui->Dec_B->isChecked() == true) {
+        ui->Value->setDisplayIntegerBase(10);
+    } // set display to dec
+    if(ui->BinaryR_B->isChecked() == true) {
+        ui->ValueR->setDisplayIntegerBase(2);
+    } // set display to binary
+    else if(ui->HexR_B->isChecked() == true) {
+        ui->ValueR->setDisplayIntegerBase(16);
+    } // set display to hex
+    else if(ui->DecR_B->isChecked() == true) {
+        ui->ValueR->setDisplayIntegerBase(10);
+    } // set display to dec
+} //DisplayTypeChanged()
 
+/******************************************************************************
+ * void SendValueUpdated()
+ * Updates the TxBuffer based on the displayed values
+ * ***************************************************************************/
+void MainWindow::SendValueUpdated(int value) {
+    int index = ui->Index->value();
+    TxBuffer[index] = (char) value;
+    QString displayStr;
+    QString data;
+    for(int i = 255; i >= 0; i--) {
+        data = QString("%1").arg((unsigned int) TxBuffer[i], 0, 16);
+        displayStr.append(data);
+    } // insert all items
+    ui->ValuePreview->setText(displayStr);
+    ui->ByteStream->clear();
+    ui->ByteStream->insertPlainText(displayStr);
+} // SendvalueUpdated
+
+/******************************************************************************
+ * void SendIndexUpdated()
+ * Updates the Tx Value based on the displayed index
+ * ***************************************************************************/
+void MainWindow::SendIndexUpdated(int value) {
+    ui->Value->setValue((unsigned int) TxBuffer[value]);
+} // SendIndexUpdated
+
+/******************************************************************************
+ * void ReadIndexUpdated()
+ * pdates the Rx Value based on the displayed index
+ * ***************************************************************************/
+void MainWindow::ReadIndexUpdated(int value) {
+    ui->ValueR->setValue((unsigned int) RxBuffer[value]);
+} // ReadIndexUpdated

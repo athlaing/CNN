@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>501</width>
-    <height>326</height>
+    <width>605</width>
+    <height>383</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -34,7 +34,7 @@
        <item>
         <widget class="QTabWidget" name="WrittingTabs_W">
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="ByteWrite_T">
           <attribute name="title">
@@ -55,12 +55,9 @@
             </spacer>
            </item>
            <item>
-            <widget class="QFrame" name="DisplayType_G">
-             <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
-             </property>
-             <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
+            <widget class="QGroupBox" name="DisplayType_G">
+             <property name="checkable">
+              <bool>false</bool>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_3">
               <item>
@@ -111,6 +108,9 @@
                   <verstretch>0</verstretch>
                  </sizepolicy>
                 </property>
+                <property name="maximum">
+                 <number>255</number>
+                </property>
                </widget>
               </item>
               <item>
@@ -127,6 +127,9 @@
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
+                </property>
+                <property name="maximum">
+                 <number>255</number>
                 </property>
                 <property name="displayIntegerBase">
                  <number>2</number>
@@ -203,17 +206,7 @@
             </spacer>
            </item>
            <item>
-            <widget class="QSpinBox" name="ByteStream">
-             <property name="minimum">
-              <number>-999999999</number>
-             </property>
-             <property name="maximum">
-              <number>999999999</number>
-             </property>
-             <property name="displayIntegerBase">
-              <number>16</number>
-             </property>
-            </widget>
+            <widget class="QPlainTextEdit" name="ByteStream"/>
            </item>
            <item>
             <widget class="QPushButton" name="SendByteStream">
@@ -281,7 +274,7 @@
        <item>
         <widget class="QTabWidget" name="ReadingTabs_W">
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="ByteRead_T">
           <attribute name="title">
@@ -351,7 +344,20 @@
                </widget>
               </item>
               <item>
-               <widget class="QSpinBox" name="IndexR"/>
+               <widget class="QSpinBox" name="IndexR">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="readOnly">
+                 <bool>false</bool>
+                </property>
+                <property name="maximum">
+                 <number>255</number>
+                </property>
+               </widget>
               </item>
               <item>
                <widget class="QLabel" name="ValueR_T">
@@ -361,7 +367,20 @@
                </widget>
               </item>
               <item>
-               <widget class="QSpinBox" name="ValueR"/>
+               <widget class="QSpinBox" name="ValueR">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+                <property name="maximum">
+                 <number>255</number>
+                </property>
+               </widget>
               </item>
              </layout>
             </widget>
@@ -387,7 +406,11 @@
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_4">
            <item>
-            <widget class="QTextBrowser" name="DataStreamR"/>
+            <widget class="QPlainTextEdit" name="DataStreamR">
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -397,6 +420,16 @@
      </widget>
     </item>
    </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>605</width>
+     <height>21</height>
+    </rect>
+   </property>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

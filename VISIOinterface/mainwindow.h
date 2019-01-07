@@ -16,15 +16,22 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void InitializeWin();
-    void InitializeFTDI();
 public slots:
+    // FPGA interfacing functions
     void ReadFromFPGA();
     void SendToFPGA();
+    void InitializeFTDI();
+    void CloseFTDI();
+    // gui interfacing functions
+    void DisplayTypeChanged(bool);
+    void SendValueUpdated(int);
+    void SendIndexUpdated(int);
+    void ReadIndexUpdated(int);
 private:
     Ui::MainWindow *ui;
     FT_HANDLE ftHandle; // handle for FTDI protocol
-    char TxBuffer[256];
-    char RxBuffer[256];
+    unsigned char TxBuffer[256];
+    unsigned char RxBuffer[256];
 };
 
 #endif // MAINWINDOW_H
