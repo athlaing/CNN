@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>463</width>
+    <width>501</width>
     <height>326</height>
    </rect>
   </property>
@@ -16,27 +16,27 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QGroupBox" name="groupBox">
+     <widget class="QGroupBox" name="WritingTool_G">
       <property name="title">
        <string>FPGA Writing Tools</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="Address_T">
          <property name="text">
           <string>Address</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="spinBox"/>
+        <widget class="QSpinBox" name="Address"/>
        </item>
        <item>
-        <widget class="QTabWidget" name="tabWidget">
+        <widget class="QTabWidget" name="WrittingTabs_W">
          <property name="currentIndex">
           <number>0</number>
          </property>
-         <widget class="QWidget" name="tab">
+         <widget class="QWidget" name="ByteWrite_T">
           <attribute name="title">
            <string>Byte Edit Mode</string>
           </attribute>
@@ -55,7 +55,7 @@
             </spacer>
            </item>
            <item>
-            <widget class="QFrame" name="frame_2">
+            <widget class="QFrame" name="DisplayType_G">
              <property name="frameShape">
               <enum>QFrame::StyledPanel</enum>
              </property>
@@ -64,21 +64,21 @@
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_3">
               <item>
-               <widget class="QRadioButton" name="radioButton_2">
+               <widget class="QRadioButton" name="Binary_B">
                 <property name="text">
                  <string>Binary</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QRadioButton" name="radioButton">
+               <widget class="QRadioButton" name="Hex_B">
                 <property name="text">
                  <string>Hex</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QRadioButton" name="radioButton_3">
+               <widget class="QRadioButton" name="Dec_B">
                 <property name="text">
                  <string>Dec</string>
                 </property>
@@ -88,7 +88,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QFrame" name="frame_3">
+            <widget class="QFrame" name="Value_G">
              <property name="frameShape">
               <enum>QFrame::StyledPanel</enum>
              </property>
@@ -97,14 +97,14 @@
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_2">
               <item>
-               <widget class="QLabel" name="label_3">
+               <widget class="QLabel" name="Index_T">
                 <property name="text">
                  <string>Index: </string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QSpinBox" name="spinBox_3">
+               <widget class="QSpinBox" name="Index">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -114,14 +114,14 @@
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="label_4">
+               <widget class="QLabel" name="Value_T">
                 <property name="text">
                  <string>Value: </string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QSpinBox" name="spinBox_2">
+               <widget class="QSpinBox" name="Value">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -137,7 +137,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QFrame" name="frame_4">
+            <widget class="QFrame" name="Preview_G">
              <property name="frameShape">
               <enum>QFrame::StyledPanel</enum>
              </property>
@@ -146,14 +146,14 @@
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_5">
               <item>
-               <widget class="QLabel" name="label_2">
+               <widget class="QLabel" name="ValuePreview_T">
                 <property name="text">
                  <string>Preview: </string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit">
+               <widget class="QLineEdit" name="ValuePreview">
                 <property name="readOnly">
                  <bool>true</bool>
                 </property>
@@ -163,7 +163,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton">
+            <widget class="QPushButton" name="SendByte">
              <property name="text">
               <string>Send to FPGA (BYTE)</string>
              </property>
@@ -184,7 +184,7 @@
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="tab_2">
+         <widget class="QWidget" name="DataStream_T">
           <attribute name="title">
            <string>Data Stream</string>
           </attribute>
@@ -203,7 +203,7 @@
             </spacer>
            </item>
            <item>
-            <widget class="QSpinBox" name="spinBox_4">
+            <widget class="QSpinBox" name="ByteStream">
              <property name="minimum">
               <number>-999999999</number>
              </property>
@@ -216,7 +216,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_2">
+            <widget class="QPushButton" name="SendByteStream">
              <property name="text">
               <string>Send to FPGA (HEX STREAM)</string>
              </property>
@@ -250,7 +250,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QGroupBox" name="groupBox_2">
+     <widget class="QGroupBox" name="ReadingTool_G">
       <property name="title">
        <string>FPGA Reading Tool</string>
       </property>
@@ -272,18 +272,18 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_3">
+        <widget class="QPushButton" name="ReadFromFPGA_B">
          <property name="text">
           <string>Read From FPGA</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QTabWidget" name="tabWidget_2">
+        <widget class="QTabWidget" name="ReadingTabs_W">
          <property name="currentIndex">
           <number>1</number>
          </property>
-         <widget class="QWidget" name="tab_3">
+         <widget class="QWidget" name="ByteRead_T">
           <attribute name="title">
            <string>Byte Read</string>
           </attribute>
@@ -302,7 +302,7 @@
             </spacer>
            </item>
            <item>
-            <widget class="QFrame" name="frame">
+            <widget class="QFrame" name="DisplayTypeR_G">
              <property name="frameShape">
               <enum>QFrame::StyledPanel</enum>
              </property>
@@ -311,21 +311,21 @@
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_4">
               <item>
-               <widget class="QRadioButton" name="radioButton_4">
+               <widget class="QRadioButton" name="BinaryR_B">
                 <property name="text">
                  <string>Binary</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QRadioButton" name="radioButton_5">
+               <widget class="QRadioButton" name="HexR_B">
                 <property name="text">
                  <string>Hex</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QRadioButton" name="radioButton_6">
+               <widget class="QRadioButton" name="DecR_B">
                 <property name="text">
                  <string>DEC</string>
                 </property>
@@ -335,7 +335,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QFrame" name="frame_5">
+            <widget class="QFrame" name="ValueR_G">
              <property name="frameShape">
               <enum>QFrame::StyledPanel</enum>
              </property>
@@ -344,24 +344,24 @@
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_6">
               <item>
-               <widget class="QLabel" name="label_5">
+               <widget class="QLabel" name="IndexR_T">
                 <property name="text">
                  <string>Index</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QSpinBox" name="spinBox_5"/>
+               <widget class="QSpinBox" name="IndexR"/>
               </item>
               <item>
-               <widget class="QLabel" name="label_6">
+               <widget class="QLabel" name="ValueR_T">
                 <property name="text">
                  <string>Value</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QSpinBox" name="spinBox_6"/>
+               <widget class="QSpinBox" name="ValueR"/>
               </item>
              </layout>
             </widget>
@@ -381,13 +381,13 @@
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="tab_4">
+         <widget class="QWidget" name="DataStreamR_T">
           <attribute name="title">
            <string>Data Stream</string>
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_4">
            <item>
-            <widget class="QTextBrowser" name="textBrowser"/>
+            <widget class="QTextBrowser" name="DataStreamR"/>
            </item>
           </layout>
          </widget>

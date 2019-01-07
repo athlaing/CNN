@@ -10,7 +10,7 @@ module Serializer(	// HOST lines
 	input inTDI; // data loaded into TDI
 	input inTCS; // chip select high when data is coming
 	input inTCK; // clock
-	output [7:0] byteAddr; // used to address the output reg
+	input [7:0] byteAddr; // used to address the output reg
 	output [7:0] outputByte;
 	
 	// variables for one trascction
@@ -18,7 +18,7 @@ module Serializer(	// HOST lines
 	reg bytesRead[256]; 		// max of 256 bytes send from host
 	reg transaction[2048]; 	// holds all the data from transcation
 	
-	assign outputByte = transcation[byteAddr];
+	assign outputByte = transaction[byteAddr];
 	
 	// TCS operates active low
 	// data from TDI should be clocked in while cs is low

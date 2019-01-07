@@ -1,5 +1,10 @@
 /*data
 build*
+VISIOinterface/*
+!VISIOinterface/*.pro
+!VISIOinterface/*.cpp
+!VISIOinterface/*.h
+VISIOinterface/ui*
 VISIOinterface/ftd2xx.dll
 VISIOinterface/ftd2xx.h
 VISIOinterface/ftd2xx.lib
