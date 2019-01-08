@@ -1,4 +1,7 @@
 #Python program for bfloat16, a truncated mantissa version of IEEE 754 float32
+from numpy import float32
+from numpy import random
+
 
 class bfloat:
 	def __init__(self, s, e, m):
@@ -38,21 +41,34 @@ class bfloat:
 
 		if self.exp == '00000000':
 			if self.man == '0000000':
-				return 0.0
+				if(self.sign == '1'):
+					return -0.0
+				else:
+					return 0.0
 			else: 
 				out = ((-1)**int(self.sign) * 2**(exp_mag - 126) * (man_mag)) 
-				return (out)
+				return (float32(out))
 		elif self.value == 'inf':
-			return float('Inf')
+			return float(int(self.sign)*'-' +'Inf')
 		else:
 			out = ((-1)**int(self.sign) * 2**(exp_mag - 127) * (man_mag + 1))
-			return (out)
+			return (float32(out))
 	#end mag
 #end class
 #----------------------------------------------------------------------------------------------
 
+#Randomly generates a 16bit binary
+def rand16bin():
+	a = random.randint(2, size = 16)
+	s = ''.join(str(i) for i in a)
+	return s
+#-----------------------------------------------------------------------------------------------
+
+#parsers single binary string into its sign, exp, and man components
+#Use *bin_parser(str) to unpack the tuples
 def bin_parser(a):
 	return a[0] , a[1:9] , a[9:]
+#-----------------------------------------------------------------------------------------------
 
 #mult_bfloat16:
 #   input: (a, b) two 16bit binary string in Bfloat16 format, where a[0], b[0] are the MSBs
@@ -88,17 +104,16 @@ def bfloat_mult(a, b):
 
 	o_man = int(a_man,2) * int(b_man,2)
 	o_man = bin(o_man)[2:]
-
 	#Normalize output mantissa, adding the extra exponents, and add the bias
 	dec_len =(len(a_man) - 1) + (len(b_man) - 1)
 	o_exp += 127
 	if len(o_man) <= dec_len + 1 and o_exp == 0:
-		o_man = o_man.rjust(15,'0')
+		o_man = o_man.rjust(14,'0')
 	else:
 		o_exp += len(o_man) - (dec_len) - (1)
 
 	#shift mantissa to right to accomudate for negative exp 
-	if o_exp < 0: 
+	if o_exp <= 0: 
 		o_man = '0'*(-o_exp) + o_man
 		o_man = o_man[0:7].ljust(7, '0')
 		return bfloat(o_sign, '0'*8, o_man)
@@ -123,6 +138,7 @@ def bfloat_add(a, b):
         return b
     elif not(a.exp == "00000000" and a.man == "0000000") and (b.exp == "00000000" and b.man == "0000000"):
         return a
+
     if(a.exp == "00000000" and a.man != "0000000"):
         a_man = "0" + a.man
         a_exp = -126
@@ -135,6 +151,7 @@ def bfloat_add(a, b):
     else:
         b_man = "1" + b.man
         b_exp = int(b.exp, 2) - 127
+
     diff = int(a.exp, 2) - int(b.exp, 2)
     #print(diff)
     if(diff > 0):
@@ -146,12 +163,14 @@ def bfloat_add(a, b):
         #print(a_man)
         b_man = int(b_man, 2)
         a_exp = b_exp
+
     if(a.sign == b.sign): 
         out_man = a_man + b_man
     elif(a.sign == "1" and b.sign == "0"):
         out_man = b_man - a_man
     elif(a.sign == "0" and b.sign == "1"):
         out_man = a_man - b_man
+
     #print(out_man)
     if len(bin(out_man)[2:]) > 8:
         shift_amt = len(bin(out_man)[2:]) - 8
@@ -163,22 +182,38 @@ def bfloat_add(a, b):
         out_exp = a_exp - shift_amt + 127
     else:
         out_exp = a_exp + 127
+
     out_exp = bin(out_exp)[2:]
     if len(out_exp) < 8:
         exp_fill = 8 - len(out_exp)
         for i in range(0, exp_fill):
             out_exp = "0" + out_exp
+    #Todo: Bug where adding two negative numbers, the result becomes positive. 
+    #
     if(out_man < 0):
         out_sign = "1"
         out_man = (-1)*out_man
     else:
         out_sign = "0"
+        #temporary fix
+        if a.sign == '1' and b.sign == '1':
+        	out_sign = '1'
     #print(bin(out_man))
     return bfloat(out_sign, out_exp, bin(out_man)[3:])
 
-# a = bfloat('0','01011000','0010110')
-# b = bfloat('1','00100011','0101100')
-# print(a.display_bin(), "----", a.display_dec())
-# print(b.display_bin(), "----", b.display_dec())
-# print(bfloat_mult(a, b).display_dec())
-# print(a.display_dec() * b.display_dec())
+###############################################################
+# s1,e1,m1 = bin_parser(rand16bin())
+# s2,e2,m2 = bin_parser(rand16bin())
+# a = bfloat(s1,e1,m1)
+# b = bfloat(s1,e2,m2)
+# sum = bfloat_add(a,b).display_dec()
+# sum32 = a.display_dec() + b.display_dec() 
+
+# print("binary a: ", a.sign, a.exp, a.man)
+# print("binary b: ", b.sign, b.exp, b.man)
+# print("decimal a: ", a.display_dec())
+# print("decimal b: ", b.display_dec())
+# print("sum32 : ", sum32)
+# print("sum   : ", sum)
+
+

@@ -54,6 +54,9 @@ else:
 a_list = list(itertools.product([0,1], repeat=16))
 b_list = list(itertools.product([0,1], repeat=16))
 
+bfloat_min = v2.bfloat('0', '00000000' , '0000001').display_dec()
+bfloat_max = v2.bfloat('0', '11111110' , '1111111').display_dec()
+
 if (range != -1):
     num_test = range ** 2
 else:
@@ -91,21 +94,27 @@ if(mult):
                         if(not quiet):
                             print("Version 1: ",c_v1)
                         
-                        #compare 32-bit version
-                        if (compare_32):
-                            a_32 = v1.bfloat(str(a[0]),str(a[1:9]),str(a[9:])).display_dec()
-                            b_32 = v1.bfloat(str(b[0]),str(b[1:9]),str(b[9:])).display_dec()
-                            c_32 = a_32 * b_32
-                            diff_v1 = abs((c_32-c_16_v1)/c_32) 
-                            if (diff_v1 >= epsilon):
-                                if (strict):
-                                    assert False, "error larger than epsilon"
-                                error_acc_v1 += 1
-                                if (not quiet):
-                                    print("Version 1 accuracy with 32 bit is " + str(diff_v1) + 
-                                          " 16-bit: " + str(c_16_v1) +
-                                          " 32-bit: " + str(c_32))
-                                
+                    #compare 32-bit version
+                    if (compare_32):
+                        a_32 = v2.bfloat(str(a[0]),str(a[1:9]),str(a[9:])).display_dec()
+                        b_32 = v2.bfloat(str(b[0]),str(b[1:9]),str(b[9:])).display_dec()
+                        c_32 = a_32 * b_32
+                        
+                        if abs(c_32) == 0.0 or abs(c_16_v2) == 0.0:
+                            diff_v2 = 0.0
+                        elif abs(c_32) == float("Inf") or abs(c_16_v2) == float("Inf"):
+                            diff_v2 = 0.0
+                        else:
+                            diff_v2 = abs((c_32-c_16_v2)/(c_32))
+
+                        if (diff_v2 >= epsilon):
+                            if (strict):
+                                assert False, "error larger than epsilon"
+                            error_acc_v2 += 1
+                            if (not quiet):
+                                print("Version 2 accuracy with 32 bit is " + str(diff_v2) + 
+                                      " 16-bit: " + str(c_16_v2) +
+                                      " 32-bit: " + str(c_32))                                
                     except Exception as e:
                         if (strict):
                             print(e)
