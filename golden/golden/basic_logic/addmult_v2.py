@@ -6,7 +6,7 @@ from numpy import random
 class bfloat:
 	def __init__(self, s, e, m):
 		if len(s) + len(e) + len(m) != 16:
-			print("Argument isn't 16bits")
+			print("Argument isn't 16bits:" , s, e, m)
 		else:
 			self.sign = s
 			self.exp = e
@@ -151,27 +151,42 @@ def bfloat_add(a, b):
     else:
         b_man = "1" + b.man
         b_exp = int(b.exp, 2) - 127
+    
+    if(int(a_man,2) < int(b_man,2)):
+        a_man = a_man + '0'
+        a_exp = a_exp - 1
+    elif(int(b_man,2) < int(a_man,2)):
+        b_man = b_man + '0'
+        b_exp = b_exp - 1
+    # print(a_man, b_man)
+    diff = a_exp - b_exp
 
-    diff = int(a.exp, 2) - int(b.exp, 2)
-    #print(diff)
-    if(diff > 0):
+    if(diff >= 0):
         b_man = int(b_man, 2) >> diff
         a_man = int(a_man, 2)
         b_exp = a_exp
     elif(diff < 0):
         a_man = int(a_man, 2) >> (-diff)
-        #print(a_man)
         b_man = int(b_man, 2)
         a_exp = b_exp
-
+    # print(a_man, b_man)
+    # print(bin(a_man)[2:], bin(b_man)[2:])
     if(a.sign == b.sign): 
         out_man = a_man + b_man
     elif(a.sign == "1" and b.sign == "0"):
         out_man = b_man - a_man
     elif(a.sign == "0" and b.sign == "1"):
         out_man = a_man - b_man
+    
+    if(out_man < 0):
+        out_sign = "1"
+        out_man = -out_man
+    else:
+        out_sign = "0"
+        if a.sign == '1' and b.sign == '1':
+            out_sign = '1'
 
-    #print(out_man)
+    # print(bin(out_man))
     if len(bin(out_man)[2:]) > 8:
         shift_amt = len(bin(out_man)[2:]) - 8
         out_man = out_man >> shift_amt
@@ -180,33 +195,36 @@ def bfloat_add(a, b):
         shift_amt = 8 - len(bin(out_man)[2:])
         out_man = out_man << shift_amt
         out_exp = a_exp - shift_amt + 127
+
     else:
         out_exp = a_exp + 127
+        
+    if out_exp <= 0:
+        out_man = bin(out_man >> -out_exp)[2:]
+        out_man = out_man.rjust(8, '0')
+        return bfloat(out_sign, '0'*8, out_man[0:7])
 
+    # print(out_exp)
+    #TODO: Bugs with negative exponent 
     out_exp = bin(out_exp)[2:]
     if len(out_exp) < 8:
         exp_fill = 8 - len(out_exp)
         for i in range(0, exp_fill):
             out_exp = "0" + out_exp
-    #Todo: Bug where adding two negative numbers, the result becomes positive. 
-    #
-    if(out_man < 0):
-        out_sign = "1"
-        out_man = (-1)*out_man
-    else:
-        out_sign = "0"
-        #temporary fix
-        if a.sign == '1' and b.sign == '1':
-        	out_sign = '1'
-    #print(bin(out_man))
-    return bfloat(out_sign, out_exp, bin(out_man)[3:])
+
+    out_man = bin(out_man)[2:]
+    if len(out_man) < 8:
+        out_man = out_man.rjust(8, '0')
+    
+    # print(out_sign, out_exp, out_man)
+    return bfloat(out_sign, out_exp, (out_man)[1:8])
 
 ###############################################################
-# s1,e1,m1 = bin_parser(rand16bin())
-# s2,e2,m2 = bin_parser(rand16bin())
+# s1,e1,m1 = bin_parser('0011101011111011')
+# s2,e2,m2 = bin_parser('1011101100000000')
 # a = bfloat(s1,e1,m1)
-# b = bfloat(s1,e2,m2)
-# sum = bfloat_add(a,b).display_dec()
+# b = bfloat(s2,e2,m2)
+# sum = bfloat_add(a,b)
 # sum32 = a.display_dec() + b.display_dec() 
 
 # print("binary a: ", a.sign, a.exp, a.man)
@@ -214,6 +232,5 @@ def bfloat_add(a, b):
 # print("decimal a: ", a.display_dec())
 # print("decimal b: ", b.display_dec())
 # print("sum32 : ", sum32)
-# print("sum   : ", sum)
-
-
+# print("sum   : ", sum.display_dec())
+# print("sum bin: ", sum.display_bin())
