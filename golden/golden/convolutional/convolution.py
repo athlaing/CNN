@@ -2,8 +2,8 @@ import sys
 sys.path.append("../../")
 from golden.basic_logic import addmult_v2 as alu
 
-adder = alu.bfloat_mult
-mult  = alu.bfloat_add
+add = alu.bfloat_add
+mult  = alu.bfloat_mult
 format = alu.bfloat
 
 #=========================================================================
@@ -26,7 +26,7 @@ def zero_padding(input, input_d, padding):
 
     for i in range(padded_input_s):
         if (i < (padded_input_d * padding) + padding):
-            padded_input[i] = 0
+            padded_input[i] = format('0')
         else:
             if (input_count < input_s):
                 if (row_count < input_d):
@@ -45,12 +45,12 @@ def zero_padding(input, input_d, padding):
     return padded_input
 
 def dotproduct_and_summation(input, input_d, filter, filter_d, filter_s, start):
-    sum = 0
+    sum = format('0')
     count = 0
     offset = 0
 
     for i in range(filter_s):
-        sum += input[start + offset] * filter[i]
+        sum = add(mult(input[start + offset], filter[i]),sum)
         if(count == filter_d - 1):
             count = 0
             offset += input_d - filter_d + 1
