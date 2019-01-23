@@ -2,11 +2,10 @@ import sys
 import json
 from pprint import pprint
 sys.path.append("../../")
-from golden.convolutional import convolution
-from golden.fully_connected import fc
+import golden.layer.convolution.conv2D as conv2D
+import golden.layer.fullyconnected.fc as fc
 from golden.utils import loadMatrix as lm
-conv2D = convolution.conv2D
-fc = fc.fc
+from golden.activation import softmax.functional as softmax
 
 #==========================================================# Internal Function
 #==========================================================
@@ -19,7 +18,7 @@ def preprocess(weight_json):
     #end TODO============
     return weights
 
-def postprocess(out_json, ref_json):
+def postprocess(output,out_json, ref_json):
     with open(ref_json) as f:
         ref = json.load(f)
     #TODO===============
@@ -33,7 +32,11 @@ def streamInput(in_path, batchsize=1):
     #end TODO============
     pass
 
-def model():
+def model(input):
     #TODO===============
     #  define specific model
+    x = conv2D(input)
+    x = fc(x)
+    out = softmax(x)
+    return out
     #end TODO============
