@@ -21,10 +21,10 @@ class PETmodel(nn.Module):
         return x
     
 def loadParameters(model,param_path):
-    files = [f for f in listdir(param_path) if isfile(join(param_path, f))]
-    model.conv.bias = torch.load(files[0])
-    model.conv.weights = torch.load(files[1])
-    model.fc.bias = torch.load(files[2])
-    model.fc.weights = torch.load(files[3])
+    files = [param_path + '/' + f for f in listdir(param_path) if isfile(join(param_path, f))]
+    model.conv.bias = torch.nn.Parameter(torch.load(files[0]))
+    model.fc.weights = torch.nn.Parameter(torch.load(files[1]))
+    model.conv.weights = torch.nn.Parameter(torch.load(files[2]))
+    model.fc.bias = torch.nn.Parameter(torch.load(files[3]))
     print ("Done loading!")
     return model
