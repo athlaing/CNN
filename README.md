@@ -10,6 +10,8 @@ A Convolutional Neural Network Layers Library on FPGA
 * Arthur Hlaing
 * Kawah Yee
 * Adam Jones
+* Ben Li
+* Cody Hou
 
 # C Code
 ### Run reference
