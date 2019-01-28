@@ -28,3 +28,23 @@ def loadParameters(model,param_path):
     model.fc.bias = torch.nn.Parameter(torch.load(files[3]))
     print ("Done loading!")
     return model
+
+def preprocess(loader):
+    mean = 0
+    std  = 0
+    nb_samples = 0
+    try:
+        for images, _ in loader:
+            #import IPython; IPython.embed()
+            batch_samples = images.size(0)
+            images = images.view(batch_samples, images.size(1), -1)
+            mean += images.mean(2).sum(0)
+            std += images.std(2).sum(0)
+            nb_samples += batch_samples
+        mean /= nb_samples
+        std /= nb_samples 
+        return mean, std
+    except KeyboardInterrupt:
+        mean /= nb_samples
+        std /= nb_samples        
+    return mean, std
