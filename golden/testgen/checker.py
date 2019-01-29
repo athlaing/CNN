@@ -4,7 +4,7 @@ import argparse
 parser = argparse.ArgumentParser(description='Checks if the outputs verilog adder/mult matches with reference')
 parser.add_argument("-w","--write", help="Enable write to file. Default is false", default=False)
 parser.add_argument("-a","--adder", help="Enable adder reference check. Default is True", default=True)
-parser.add_argument("-m","--mult", help="Enable mult reference check. Default is True", default=False)
+parser.add_argument("-p","--mult", help="Enable mult reference check. Default is True", default=False)
 
 args = vars(parser.parse_args())
 write2file = args["write"] == "True"
@@ -24,7 +24,7 @@ if(mult):
 	errorContent = []
 
 	if fvt_mult == None or fref_mult == None:
-		print("FATAL: ERROR: No require files are in the directory.")
+		print("FATAL ERROR: No require files are in the directory.")
 		sys.exit()
 	if len(lvt) != len(lref):
 		print("ERROR: Mult_out and mult_ref aren't the same length.")
@@ -61,16 +61,16 @@ if(add):
 	errorContent = []
 
 	if fvt_add == None or fref_add == None:
-		print("FATAL: ERROR: No require files are in the directory.")
+		print("FATAL ERROR: No require files are in the directory.")
 		sys.exit()
 	if len(lvt) != len(lref):
-		print("ERROR: Mult_out and mult_ref aren't the same length.")
+		print("ERROR: add_out and add_ref aren't the same length.")
 	else:
 		for i in range(len(lvt)):
 			if lvt[i] != lref[i]:
 				error += 1
 				errorContent.append("Mismatch at Line " + str(i + 1) + 
-					":\n" + "mult_out: " + lvt[i] + "mult_ref: " + lref[i])
+					":\n" + "add_out: " + lvt[i] + "add_ref" + lref[i])
 
 	print("Total Number of mismatches: " + str(error))
 	if write2file:

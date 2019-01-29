@@ -1,7 +1,8 @@
 #Testbench generator for mult and adder
 #
-#TODO: testgen for adder
-#      option for which golden version to use
+#TODO: True random flag that randomly generate test case pairs
+#      -c --clean flag to clean testgen files
+#      
 
 import sys
 sys.path.append('../golden/basic_logic')
@@ -15,7 +16,7 @@ parser.add_argument("-r","--range", help="number of test cases to run", default=
 parser.add_argument("-m","--mix", help="randomize test case list before testing", default="True")
 parser.add_argument("-s","--stepsize", help="stepsize for the simulation in picoseconds", default=10)
 parser.add_argument("-a","--adder", help="enable adder testbench generation.", default="True")
-parser.add_argument("-m","--mult", help="enable mult testbench generation.", default="True")
+parser.add_argument("-p","--mult", help="enable mult testbench generation.", default="True")
 
 args = vars(parser.parse_args())
 
@@ -34,7 +35,7 @@ if(randomize):
     random.shuffle(a_list)
     random.shuffle(b_list)
 
-if(mult)
+if(mult):
     a_table = []
     b_table = []
     c_table = ['x'*16, 'x'*16]
@@ -100,6 +101,10 @@ if(mult)
 #end if(mult):
 
 if(add):
+    a_table = []
+    b_table = []
+    c_table = ['x'*16, 'x'*16]
+
     fvt_add = open("add_comb.vt", 'w')
     fref_add = open("add_ref.csv", 'w')
     fvt_add.writelines(["module add_comb_vt;\n",
@@ -126,8 +131,6 @@ if(add):
             ])
             a_v2 = v2.bfloat(str(a[0]),str(a[1:9]),str(a[9:]))
             b_v2 = v2.bfloat(str(b[0]),str(b[1:9]),str(b[9:]))
-            print(a_v2.display_bin(), b_v2.display_bin())
-            print(a_v2.display_dec(), b_v2.display_dec())
             c_v2 = v2.bfloat_add(a_v2, b_v2)
             a_table.append(a)
             b_table.append(b)
