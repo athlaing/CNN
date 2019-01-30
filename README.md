@@ -1,5 +1,5 @@
 <p align="center">
-<img src="./image/icon.png" alt="drawing" width="200"/>
+<img src="icon.png" alt="drawing" width="200"/>
 </p>
 <p align="center">
 A Convolutional Neural Network Layers Library on FPGA
