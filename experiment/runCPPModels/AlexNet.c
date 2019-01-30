@@ -8,16 +8,27 @@
 #include <time.h>
 #include <math.h>
 
-float** basicBlockPool(float** input, int input_d, float*** conv_weight,
-                   int conv_weight_d, float* conv_bias, int conv_padding,
-                   int conv_stride, int input_ch, int conv_ch, int pool_d,
-                   int pool_stride, int pool_padding) {
-
+float** basicBlockPool(float** input,
+					   int input_d,
+					   float*** conv_weight,
+					   int conv_weight_d,
+					   float* conv_bias,
+					   int conv_padding,
+					   int conv_stride,
+					   int input_ch,
+					   int conv_ch,
+					   int pool_d,
+					   int pool_stride,
+					   int pool_padding) {
+  // receptive field area
   int conv_weight_s = conv_weight_d * conv_weight_d;
+  // activation map dimension
   int conv_out_d = get_output_d(input_d, conv_weight_d, conv_padding, conv_stride);
+  // activation map area
   int conv_out_s = conv_out_d * conv_out_d;
-
+  // temporary holds the activation map for each filter
   float** conv_hold = malloc(input_ch * sizeof(float*));
+  // holds activation maps for each filter + bias
   float** conv = malloc_2D(conv_ch, conv_out_s);
   float** pool = malloc(conv_ch * sizeof(float*));
 
@@ -25,19 +36,19 @@ float** basicBlockPool(float** input, int input_d, float*** conv_weight,
     for(int channel = 0; channel < input_ch; channel++) {
       conv_hold[channel] = Conv2d(input[channel], input_d, conv_weight[filter][channel],
                          conv_weight_d, conv_stride, conv_padding);
-    }
+    } // convolve for each channel(RGB) value of pixel
     for(int element = 0; element < conv_out_s; element++) {
       conv[filter][element] = conv_bias[filter];
       for(int channel = 0; channel < input_ch; channel++) {
         conv[filter][element] += conv_hold[channel][element];
-      }
-    }
+      } // add values from activation map to bias
+    } // y = conv_weight[filter][channel] . input[channel] + bias
     for(int channel = 0; channel < input_ch; channel++) {
       free(conv_hold[channel]);
-    }
+    } // frees all temporary activation map created by conv2d
     pool[filter] = Maxpool(conv[filter], conv_out_d, pool_d, pool_stride,
                            pool_padding);
-  }
+  } // for each filter convolve -> add bias -> pool
 
   free(conv_hold);
   free_2D(input, input_ch);
@@ -84,17 +95,43 @@ float** basicBlock(float** input, int input_d, float*** conv_weight,
 }
 
 void alexnet() {
-
+  // Q: are the values saved in row format or column format
+  /* pictures conversions
+   * p0 p1 p2
+   * p3 p4 p5
+   * p6 p7 p8 */
+  /* file format expectation:
+   * R0 R1 R2 R3 ... Rn ... G0 G1 G2 G3... Gn... B0 B1 B2 B3... Bn ?
+   * 2-D array expectation
+   * R0 G0 B0
+   * R1 G1 B1
+   * .  .  .
+   * R2 G2 B2  where each column is a channel ?*/
+  // 50175: sqrt(50175) = 224 x 224 image , depth of 3 -> RGB?
   float** image = read_2D("image.txt", 3, 50176);
+  // 121: sqrt(121) = 11 x 11 receptive field dimensions?
+  // 3:   depth of filter ?
+  // 64:  number of features ?
   float*** block0_w = read_3D("alex_data/block0_w.txt", 64, 3, 121);
+  // bias array y = w*x + bias
   float* block0_b = read_1D("alex_data/block0_b.txt", 64);
 
   // nn.Conv2d(3, 64, kernel_size=11, stride=4, padding=2),
   // nn.ReLU(inplace=True),
   // nn.MaxPool2d(kernel_size=3, stride=2)
 
-  float** block0 = basicBlockPool(image, 224, block0_w, 11, block0_b, 2, 4, 3, 64,
-                              3, 2, 0);
+  float** block0 = basicBlockPool(image, 	// 2-d image from file
+								  224,   	// image dimension
+								  block0_w, // 3-d weight
+								  11,	 	// receptive field/filter dimension
+								  block0_b, // bias array
+								  2, 		// padding value 
+								  4,		// stride amount
+								  3,		// input depth
+								  64,		// number of filters/features
+								  3,		// pool dimensions
+								  2,		// pool stride
+								  0);		// pool padding
 
   // nn.Conv2d(64, 192, kernel_size=5, padding=2),
   // nn.ReLU(inplace=True),
