@@ -1,0 +1,14 @@
+1)	Open Vivado.
+2)	Make  New Project
+	a.	File->New -> Project and click next
+	b.	Set project name  and directory and click next
+	c.	Make sure RTL Project is selected, and the checkbox is unchecked. Click Next
+	d.	Click “Add Files”, Add UART_TX_RX.v and VISIOinterface.v from the repository. Click Next
+	e.	Click “Add Files”, Add Arty-A7-35-Master.xdc from the repository. Click Next
+	f.	Select “xc7a35ticsg324-1L”. Click Next and then Finish.
+3)	Run the following Synthesis, Implementation, Generate r Bitstream
+4)	Programing the FPGA
+	a.	Open Hardware Manager -> Open Target > Auto Connect
+	b.	Click Program Device > xc7a35t_0
+	c.	Navigate to *.runs/impl_1
+	d.	 select *.bit
