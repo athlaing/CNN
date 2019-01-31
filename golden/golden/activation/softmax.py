@@ -7,7 +7,7 @@ add = alu.bfloat_add
 mult  = alu.bfloat_mult
 format = alu.bfloat
 def functional(input, input_s):
-    output_array [format('0') for x in range (input_s)]
+    output_array [format('0')] * input_s
     sum = format('0')
     for  i in range (input_s):
         add(np.exp(input[i]),sum)
