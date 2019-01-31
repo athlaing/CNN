@@ -1,7 +1,7 @@
 #Python program for bfloat16, a truncated mantissa version of IEEE 754 float32
 from numpy import float32
 from numpy import random
-
+import sys
 
 class bfloat:
 	def __init__(self, s, e, m):
@@ -205,7 +205,6 @@ def bfloat_add(a, b):
         return bfloat(out_sign, '0'*8, out_man[0:7])
 
     # print(out_exp)
-    #TODO: Bugs with negative exponent 
     out_exp = bin(out_exp)[2:]
     if len(out_exp) < 8:
         exp_fill = 8 - len(out_exp)
@@ -218,19 +217,21 @@ def bfloat_add(a, b):
     
     # print(out_sign, out_exp, out_man)
     return bfloat(out_sign, out_exp, (out_man)[1:8])
+#End bfloat_add() -------------------------------------------------
 
-###############################################################
-# s1,e1,m1 = bin_parser('0011101011111011')
-# s2,e2,m2 = bin_parser('1011101100000000')
-# a = bfloat(s1,e1,m1)
-# b = bfloat(s2,e2,m2)
-# sum = bfloat_add(a,b)
-# sum32 = a.display_dec() + b.display_dec() 
+#For debugging
+if __name__ == '__main__'
+	s1,e1,m1 = bin_parser('0011101011111011')
+	s2,e2,m2 = bin_parser('1011101100000000')
+	a = bfloat(s1,e1,m1)
+	b = bfloat(s2,e2,m2)
+	sum = bfloat_add(a,b)
+	sum32 = a.display_dec() + b.display_dec() 
 
-# print("binary a: ", a.sign, a.exp, a.man)
-# print("binary b: ", b.sign, b.exp, b.man)
-# print("decimal a: ", a.display_dec())
-# print("decimal b: ", b.display_dec())
-# print("sum32 : ", sum32)
-# print("sum   : ", sum.display_dec())
-# print("sum bin: ", sum.display_bin())
+	print("binary a: ", a.sign, a.exp, a.man)
+	print("binary b: ", b.sign, b.exp, b.man)
+	print("decimal a: ", a.display_dec())
+	print("decimal b: ", b.display_dec())
+	print("sum32 : ", sum32)
+	print("sum   : ", sum.display_dec())
+	print("sum bin: ", sum.display_bin())
