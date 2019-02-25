@@ -44,16 +44,23 @@ def test():
     #==========================================================
     # INFERENCE
     #==========================================================
+    print("="*80)
+    print("\t\t\t\tInference started")
+    print("="*80)
     weights = PACKAGE.preprocess(WEIGHT)
-    input   = PACKAGE.streamInput(INPUT)
-    
-    # for i, data in enumerate(inputStream, 0):
-    #     image = data[0]
-    #     label = data[1]
-    #     output = model(image)
-    #
-    #     if (label != output):
-    #         ERROR += 1
+    inputs   = PACKAGE.streamInput(INPUT)
+    print("Weight names: ")
+    for keys, value in weights.items():
+        print(keys)
+
+
+    for i, data in enumerate(inputs, 0):
+        image = data[0]
+        label = data[1]
+        output = PACKAGE.model(image, weights)
+
+        if (label != output):
+            ERROR += 1
 
 def stats():
     if (not QUIET):

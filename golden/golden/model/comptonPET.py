@@ -25,8 +25,9 @@ def preprocess(weight_path):
         file_path = weight_path + '/' + str(file)
         with open(file_path) as f:
             obj = codecs.open(file_path, 'r', encoding='utf-8').read()
-            list = json.loads(obj)
-            weight = np.array(list)
+            lst = json.loads(obj)
+            weight = np.array(lst).flatten()
+            weight = list(map(f2bfloat, weight))
             weights[str(file)] = weight
     return weights
 
@@ -58,10 +59,13 @@ def streamInput(image_path, samplesize=1):
         data.append(tup)
     return data
 
-def model(image):
+def model(images, weights):
     #TODO===============
     #  define specific model
-    x = conv2D(image)
+    x = conv2D(images,
+               16,
+               weights['conv.weight.json'],
+               len(weights['conv.weight.json']))
     x = fc(x)
     out = softmax(x)
     return out

@@ -62,12 +62,12 @@ def dotproduct_and_summation(input, input_d, filter, filter_d, filter_s, start):
 #=========================================================================
 #Public function
 #=========================================================================
-def conv2D(input, input_d, filter, filter_d, stride = 0, padding = 0):
+def conv2D(input, input_d, filter, filter_d, stride = 1, padding = 0):
     padded_input_d = input_d + 2 * padding
     filter_s = filter_d * filter_d
     num_hops = (padded_input_d - filter_d) / stride
     output_s = (num_hops + 1) ** 2
-    padded_intput = zero_padding(input, input_d, padding)
+    padded_input = zero_padding(input, input_d, padding)
     output_idx = 0
     start = 0
     count = 0
