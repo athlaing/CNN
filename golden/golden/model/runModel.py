@@ -46,6 +46,7 @@ def test():
     #==========================================================
     weights = PACKAGE.preprocess(WEIGHT)
     input   = PACKAGE.streamInput(INPUT)
+    
     # for i, data in enumerate(inputStream, 0):
     #     image = data[0]
     #     label = data[1]
@@ -64,4 +65,4 @@ if __name__ == '__main__':
     # inference through architecture
     test()
     # output statistics
-    stats()
+    # stats()

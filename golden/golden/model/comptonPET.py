@@ -3,7 +3,6 @@ import json
 import codecs
 import numpy as np
 import random as rd
-from datetime import dateime
 from pprint import pprint
 from os import listdir
 from os.path import isfile, join
@@ -28,7 +27,6 @@ def preprocess(weight_path):
             obj = codecs.open(file_path, 'r', encoding='utf-8').read()
             list = json.loads(obj)
             weight = np.array(list)
-
             weights[str(file)] = weight
     return weights
 
@@ -39,19 +37,26 @@ def postprocess(output,out_json, ref_json):
     #end TODO============
     pass
 
-def streamInput(image_path, samplesize=1, shuffle=True):
-    if (shuffle is True):
-        rd.seed(datetime.now())
-
-    # onlyfiles = [f for f in listdir(image_path)]
-    # images = []
+def streamInput(image_path, samplesize=1):
+    data = []
     for i in range(samplesize):
-        image_name = image_path + '/' + onlyfiles[i]
-        img = Image.open(image_name)
-        arr = numpy.array(img)
-        tup = tuple(arr, onlyfiles[i])
-        images.append(tup)
-    return images
+        label = rd.randint(1,170)
+        labelname = None;
+        if label < 10:
+            labelname = '/00' + str(label)
+        elif label >= 10 and label < 100:
+            labelname = '/0' + str(label)
+        else:
+            labelname = '/' + str(label)
+        folder = image_path  + labelname + '/'
+        onlyfiles = [f for f in listdir(folder)]
+        sample_image = onlyfiles[rd.randint(0, len(onlyfiles) - 1)]
+        img = Image.open(folder + sample_image)
+        arr = np.array(img).tolist()[0]
+        arr = list(map(f2bfloat,arr))
+        tup = (arr, label)
+        data.append(tup)
+    return data
 
 def model(image):
     #TODO===============
