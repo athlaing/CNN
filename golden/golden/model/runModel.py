@@ -6,11 +6,13 @@ MODEL = None
 INPUT = None
 WEIGHT = None
 MATLAB = None
+PACKAGE = None
 EPOCH = 1
 ERROR = 0
 ELAPSE = 0.0
 
-def init():
+def test():
+
     parser = argparse.ArgumentParser(description='Run golden model of neural neworks with bfloat16 ALU')
     parser.add_argument('-n','--name', help='file name of the model', default=None)
     parser.add_argument('-d', '--data', help='path to images', default=None)
@@ -29,34 +31,36 @@ def init():
     #==========================================================
     # Model Look Up - Need to manually add new models
     #==========================================================
-    if model == 'comptonPET':
-        from comptonPET import preprocess, postprocess, streamInput, model
+    if MODEL == 'comptonPET':
+        # from comptonPET import preprocess, postprocess, streamInput, model
+        import comptonPET
+        PACKAGE = comptonPET
     else:
         exit("ERROR: model not found!")
     #==========================================================
     # End Model Look Up
     #==========================================================
 
-def test():
-    weights = preprocess(WEIGHT)
-    inputStream = streamInput(INPUT)
-    for i, data in enumerate(inputStream, 0):
-        image = data[0]
-        label = data[1]
-        output = model(image)
-
-        if (label != output):
-            ERROR += 1
+    #==========================================================
+    # INFERENCE
+    #==========================================================
+    weights = PACKAGE.preprocess(WEIGHT)
+    input   = PACKAGE.streamInput(INPUT)
+    # for i, data in enumerate(inputStream, 0):
+    #     image = data[0]
+    #     label = data[1]
+    #     output = model(image)
+    #
+    #     if (label != output):
+    #         ERROR += 1
 
 def stats():
     if (not QUIET):
         pass
     pass
 
-if __name__ == '__main__:
+if __name__ == '__main__':
 
-    # initialize arguments and global
-    init()
     # inference through architecture
     test()
     # output statistics
