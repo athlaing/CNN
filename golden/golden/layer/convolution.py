@@ -19,7 +19,7 @@ def zero_padding(input, input_d, padding):
     input_s = input_d ** 2
     padded_input_d = input_d + 2 * padding
     padded_input_s = padded_input_d * padded_input_d
-    padded_input = [0 for i in range(padded_input_s)]
+    padded_input = [format('0'*16) for i in range(padded_input_s)]
     input_count = 0
     row_count = 0
     padding_count = 0
@@ -34,14 +34,14 @@ def zero_padding(input, input_d, padding):
                     input_count += 1
                     row_count += 1
                 else:
-                    padded_input[i] = 0
+                    padded_input[i] = format('0'*16)
                     if(padding_count == (padding * 2) - 1):
                         row_count = 0
                         padding_count =0
                     else:
                         padding_count += 1
             else:
-                padded_input[i] = 0
+                padded_input[i] = format('0'*16)
     return padded_input
 
 def dotproduct_and_summation(input, input_d, filter, filter_d, filter_s, start):
@@ -76,7 +76,7 @@ def conv2D(input, input_d, filter, filter_d, stride = 1, padding = 0):
 
     while (output_idx != output_s):
         output.append(dotproduct_and_summation(padded_input,
-                                               padding_input_d,
+                                               padded_input_d,
                                                filter,
                                                filter_d,
                                                filter_s,

@@ -62,10 +62,11 @@ def streamInput(image_path, samplesize=1):
 def model(images, weights):
     #TODO===============
     #  define specific model
-    x = conv2D(images,
-               16,
+    x = conv2D(
+               images,
+               16, # input dimension
                weights['conv.weight.json'],
-               len(weights['conv.weight.json']))
+               10) # not sure why it is 10 and not 100
     x = fc(x)
     out = softmax(x)
     return out
