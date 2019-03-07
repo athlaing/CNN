@@ -7,7 +7,7 @@ from pprint import pprint
 from os import listdir
 from os.path import isfile, join
 sys.path.append("../../")
-from golden.layer.convolution import conv2D as conv2D
+from golden.layer.convolution import conv1D as conv1D
 from golden.layer.fullyconnected import fc as fc
 from golden.utils import loadMatrix as lm
 from golden.activation.softmax import functional as softmax
@@ -59,14 +59,10 @@ def streamInput(image_path, samplesize=1):
         data.append(tup)
     return data
 
-def model(images, weights):
+def model(image, weights):
     #TODO===============
     #  define specific model
-    x = conv2D(
-               images,
-               16, # input dimension
-               weights['conv.weight.json'],
-               10) # not sure why it is 10 and not 100
+    x = conv1D(image, weights['conv.weight.json']) 
     x = fc(x)
     out = softmax(x)
     return out
