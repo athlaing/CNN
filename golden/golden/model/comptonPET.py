@@ -11,6 +11,7 @@ from golden.layer.convolution import conv1D as conv1D
 from golden.layer.fullyconnected import fc as fc
 from golden.utils import loadMatrix as lm
 from golden.activation.softmax import functional as softmax
+from golden.activation.relu import functional as relu
 from golden.basic_logic.addmult_v2 import f2bfloat
 from PIL import Image
 
@@ -62,8 +63,13 @@ def streamInput(image_path, samplesize=1):
 def model(image, weights):
     #TODO===============
     #  define specific model
-    x = conv1D(image, weights['conv.weight.json']) 
-    x = fc(x)
-    out = softmax(x)
-    return out
+    x = conv1D(image,
+        weights['conv.weight.json'],
+        weights['conv.bias.json'])
+    x = relu(x)
+    x = fc(x,
+        weights['fc.weight.json'],
+        weights['fc.bias.json'])
+    #out = softmax(x)
+    return x
     #end TODO============

@@ -3,17 +3,18 @@ sys.path.append("../../")
 from golden.basic_logic import addmult_v2 as alu
 from golden.activation import relu
 
-add = alu.bfloat_add
-mult  = alu.bfloat_mult
 format = alu.bfloat
-relu = relu.functional
 
-def fc(weight, weight_w, bias, bias_h, input, relu_f):
-    output = [format('0') for i in range (bias_h)]
-    for i in range(bias_h):
+def fc(input, weight, bias):
+    bias_d = len(bias)
+    weight_d = len(weight)
+    input_d = len(input)
+    output = [format('0'*16) for i in range (bias_d)]
+
+    # go from 0 to 169
+    for i in range(bias_d):
         output[i] = bias[i];
-        for j in range(weight_w):
-            output[i] = add(mult(weight[i * weight_w + j], input[j]), output[i])
-        if(relu_f):
-            output[i] = relu(output[i])
+        # go from 0 1600
+        for j in range(int(weight_d / input_d)):
+            output[i] += weight[i*input_d+j] * input[j]
     return output

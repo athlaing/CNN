@@ -2,6 +2,10 @@ import itertools
 import argparse
 import tqdm
 
+from os import sys
+sys.path.append("../..")
+from golden.utils import face
+
 MODEL = None
 INPUT = None
 WEIGHT = None
@@ -11,7 +15,13 @@ EPOCH = 1
 ERROR = 0
 ELAPSE = 0.0
 
-def test():
+def init():
+    global MODEL
+    global INPUT
+    global WEIGHT
+    global MATLAB
+    global QUIET
+    global PACKAGE
 
     parser = argparse.ArgumentParser(description='Run golden model of neural neworks with bfloat16 ALU')
     parser.add_argument('-n','--name', help='file name of the model', default=None)
@@ -41,12 +51,11 @@ def test():
     # End Model Look Up
     #==========================================================
 
-    #==========================================================
-    # INFERENCE
-    #==========================================================
-    print("="*80)
-    print("\t\t\t\tInference started")
-    print("="*80)
+def inference():
+    global ERROR
+    # print("="*80)
+    # print("\t\t\t\tInference started")
+    # print("="*80)
     weights = PACKAGE.preprocess(WEIGHT)
     inputs   = PACKAGE.streamInput(INPUT)
     print("Weight names: ")
@@ -69,7 +78,9 @@ def stats():
 
 if __name__ == '__main__':
 
+    face("Run Golden Model")
+    init()
     # inference through architecture
-    test()
+    inference()
     # output statistics
     # stats()

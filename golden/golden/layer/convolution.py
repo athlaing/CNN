@@ -7,58 +7,56 @@ format = alu.bfloat
 #=========================================================================
 #Private functions
 #=========================================================================
-def dotproduct_and_summation(padded_input, filter, start):
-    num_filter = len(filter)
-    # if each filter has more than 1 weight  (type = list)
-    if (isinstance(filter[0], list)):
-        filter_d = len(filter[0]) # all filters should have same length
-    # if each filter is only 1 weight (type = bfloat)
-    else:
-        filter_d = 1;
-    sum = format('0'*16)
-    count = 0
-    offset = 0
-
-    for i in range(num_filter):
-        for  j in range(filter_d):
-            sum += padded_input[start+j] * filter[i]
-    return sum
 
 #=========================================================================
 #Public functions
 #=========================================================================
-def conv1D(input, filter, stride = 1, padding = 0):
+def conv1D(input, weights, biases, stride = 1, padding = 0):
 
-    input_d = len(input)
-    num_filter = len(filter)
+    input_len = len(input)
+    num_feature_map = len(weights)
 
-    # if each filter has more than 1 weight  (type = list)
-    if (isinstance(filter[0], list)):
-        filter_d = len(filter[0]) # all filters should have same length
-    # if each filter is only 1 weight (type = bfloat)
+    # if each weights has more than 1 weights  (type = list)
+    if (isinstance(weights[0], list)):
+        kernel_size = len(weights[0]) # all weights should have same length
+    # if each weights is only 1 weights (type = bfloat)
     else:
-        filter_d = 1;
+        kernel_size = 1;
 
     # If user doesnt specify padding, see if padding is needed
     # Assume that padding is always an odd number.
-    if (padding == 0 and filter_d != 1):
-         # padding is always an integer because filter_d is odds
-        padding = (filter_d - 1) / 2
+    if (padding == 0 and kernel_size != 1):
+         # padding is always an integer because kernel_size is odds
+        padding = (kernel_size - 1) / 2
 
     # zero padding the input, if padding is 0 then there is no padding
+    # aray looks like 000xxxxxxxxxxxxxxxxxx000 where x is data, if padding = 3
     padded_input = [format('0'*16) for i in range(padding)]
     padded_input.extend(input)
     padded_input.extend([format('0'*16) for i in range(padding)])
-    padded_input_d = len(padded_input)
+    padded_input_len = len(padded_input)
 
-    num_hops = (padded_input_d - filter_d) / stride # integer division
-
-    output_idx = 0
-    start = 0
+    num_hops = int((padded_input_len - kernel_size) / stride )# integer division
+    output_col = num_hops + 1
+    output_row = num_feature_map
     output = []
 
-    while (output_idx < num_hops + 1):
-        output.append(dotproduct_and_summation(padded_input, filter, start))
-        start += stride
-        output_idx += 1
+    # for each channel
+    for r in range(output_row):
+        bias = biases[r]
+        weight = weights[r]
+        start = 0
+        for c in range(output_col):
+            sum = bias
+
+            # General Case where the kerenl is a list of bfloat 16 (iterable)
+            if kernel_size != 1:
+                for element_id, element in enumerate(weight):
+                    sum += padded_input[start + element_id] * element
+            # Case where the kernel is just a bfloat16
+            elif kernel_size == 1:
+                sum += padded_input[start] * weight
+
+            output.append(sum)
+            start += stride
     return output
