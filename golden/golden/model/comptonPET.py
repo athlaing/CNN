@@ -3,6 +3,7 @@ import json
 import codecs
 import numpy as np
 import random as rd
+from tqdm import tqdm
 from pprint import pprint
 from os import listdir
 from os.path import isfile, join
@@ -20,9 +21,10 @@ from PIL import Image
 #==========================================================
 
 def preprocess(weight_path):
+    print("Loading Weights")
     onlyfiles = [f for f in listdir(weight_path)]
     weights = {}
-    for file in onlyfiles:
+    for file in tqdm(onlyfiles):
         file_path = weight_path + '/' + str(file)
         with open(file_path) as f:
             obj = codecs.open(file_path, 'r', encoding='utf-8').read()
@@ -30,6 +32,7 @@ def preprocess(weight_path):
             weight = np.array(lst).flatten()
             weight = list(map(f2bfloat, weight))
             weights[str(file)] = weight
+    print('\n')
     return weights
 
 def postprocess(output,out_json, ref_json):
@@ -40,9 +43,10 @@ def postprocess(output,out_json, ref_json):
     pass
 
 def streamInput(image_path, samplesize=1):
+    print("Loading Images")
     data = []
-    for i in range(samplesize):
-        label = rd.randint(1,170)
+    for i in tqdm(range(samplesize)):
+        label = rd.randint(1,169)
         labelname = None;
         if label < 10:
             labelname = '/00' + str(label)
@@ -58,6 +62,7 @@ def streamInput(image_path, samplesize=1):
         arr = list(map(f2bfloat,arr))
         tup = (arr, label)
         data.append(tup)
+    print('\n')
     return data
 
 def model(image, weights):
@@ -70,6 +75,6 @@ def model(image, weights):
     x = fc(x,
         weights['fc.weight.json'],
         weights['fc.bias.json'])
-    #out = softmax(x)
-    return x
+    out = softmax(x)
+    return out
     #end TODO============

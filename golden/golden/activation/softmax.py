@@ -1,8 +1,10 @@
 import numpy as np
+import math
 import sys
 sys.path.append("../../")
 from golden.basic_logic import addmult_v2 as alu
 format = alu.bfloat
+bfloat2f = alu.bfloat2f
 
 
 def functional(input):
@@ -12,13 +14,13 @@ def functional(input):
     #   SUPER IMPORTANT:
     # This is tempo fix because there is no bfloat divide and exp
     # in future softmax should be able to support bfloat
-    # input = list(map())
     #end TODO==================
 
-    output =  [format('0')*16 for i in range*input_d]
-    sum = format('0'*16)
-    for i in range (input_s):
-        sum += np.exp(input[i])
-    for i in range (input_s):
-        output_array[i] = np.exp(input[i])/sum
-    return output_array
+    input = list(map(bfloat2f,input))
+    output =  []
+    sum = 0
+    for i in range (input_d):
+        sum += math.exp(input[i])
+    for i in range (input_d):
+        output.append(math.exp(input[i])/sum)
+    return output

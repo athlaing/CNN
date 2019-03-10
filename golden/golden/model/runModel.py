@@ -1,10 +1,10 @@
 import itertools
 import argparse
-import tqdm
-
+import numpy as np
 from os import sys
 sys.path.append("../..")
 from golden.utils import face
+from tqdm import tqdm
 
 MODEL = None
 INPUT = None
@@ -14,6 +14,7 @@ PACKAGE = None
 EPOCH = 1
 ERROR = 0
 ELAPSE = 0.0
+TESTSIZE = 10000
 
 def init():
     global MODEL
@@ -52,28 +53,30 @@ def init():
     #==========================================================
 
 def inference():
+    print("Inference Started")
     global ERROR
+    global TESTSIZE
     # print("="*80)
     # print("\t\t\t\tInference started")
     # print("="*80)
     weights = PACKAGE.preprocess(WEIGHT)
-    inputs   = PACKAGE.streamInput(INPUT)
-    print("Weight names: ")
-    for keys, value in weights.items():
-        print(keys)
-
-
-    for i, data in enumerate(inputs, 0):
+    inputs   = PACKAGE.streamInput(INPUT,samplesize=TESTSIZE)
+    # print("Weight names: ")
+    # for keys, value in weights.items():
+    #     print(keys)
+    for data in tqdm(inputs):
         image = data[0]
         label = data[1]
         output = PACKAGE.model(image, weights)
-
-        if (label != output):
+        predicted = np.argmax(output)
+        if (label != predicted):
             ERROR += 1
+    print('\n')
 
 def stats():
+    global QUIET
     if (not QUIET):
-        pass
+        print("MODEL ACCURACY: " + str((TESTSIZE - ERROR)/TESTSIZE * 100) + ' %')
     pass
 
 if __name__ == '__main__':
@@ -83,4 +86,4 @@ if __name__ == '__main__':
     # inference through architecture
     inference()
     # output statistics
-    # stats()
+    stats()

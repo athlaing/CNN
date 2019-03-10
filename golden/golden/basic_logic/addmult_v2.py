@@ -9,7 +9,7 @@ class bfloat:
 		if len(s) + len(e) + len(m) != 16:
 			print("Argument isn't 16bits:" , s, e, m)
 		else:
-			#Unparsed string is provided 
+			#Unparsed string is provided
 			if s and e == '' and m == '':
 				self.sign = s[0]
 				self.exp = s[1:9]
@@ -31,42 +31,43 @@ class bfloat:
 
 			if int(self.exp ,2) + int(self.man ,2) == 0:
 				self.value = 'zero'
-	#end __init___() 
+	#end __init___()
 
 	#display parsed binary representation
 	def display_bin(self):
 		return (self.sign, self.exp, self.man)
 	#end display_bin()
-	
+
 	#display unparsed binary represenation
 	def bin(self):
 		return self.sign + self.exp + self.man
 	#end bin()
 
 	#Display the decimal representation of bfloat
-	def display_dec(self):
-		exp_mag = int(self.exp,2)
-		start = -1
-		man_mag = 0.0
-		for m in self.man:
-			man_mag = man_mag + int(m) * 2 ** (start)
-			start = start - 1
-
-		if self.exp == '00000000':
-			if self.man == '0000000':
-				if(self.sign == '1'):
-					return -0.0
-				else:
-					return 0.0
-			else: 
-				out = ((-1)**int(self.sign) * 2**(exp_mag - 126) * (man_mag)) 
-				return (float32(out))
-		elif self.value == 'inf':
-			return float(int(self.sign)*'-' +'Inf')
-		else:
-			out = ((-1)**int(self.sign) * 2**(exp_mag - 127) * (man_mag + 1))
-			return (float32(out))
-
+	# Commented because move function out of class
+	# def bfloat2f(self):
+	# 	exp_mag = int(self.exp,2)
+	# 	start = -1
+	# 	man_mag = 0.0
+	# 	for m in self.man:
+	# 		man_mag = man_mag + int(m) * 2 ** (start)
+	# 		start = start - 1
+	#
+	# 	if self.exp == '00000000':
+	# 		if self.man == '0000000':
+	# 			if(self.sign == '1'):
+	# 				return -0.0
+	# 			else:
+	# 				return 0.0
+	# 		else:
+	# 			out = ((-1)**int(self.sign) * 2**(exp_mag - 126) * (man_mag))
+	# 			return (float32(out))
+	# 	elif self.value == 'inf':
+	# 		return float(int(self.sign)*'-' +'Inf')
+	# 	else:
+	# 		out = ((-1)**int(self.sign) * 2**(exp_mag - 127) * (man_mag + 1))
+	# 		return (float32(out))
+	#
 	#Operator overloading
 	#Only works with self and b are both bfloat
 	def __add__(self, b):
@@ -74,7 +75,7 @@ class bfloat:
 	def __mul__(self, b):
 		return bfloat_mult(self, b)
 
-#----------------------------------------------------------------------------------------------	
+#----------------------------------------------------------------------------------------------
 #end bfloat class
 #----------------------------------------------------------------------------------------------
 
@@ -93,8 +94,34 @@ def f2bfloat(num):
     binaries = [bin(i) for i in integers]
     stripped_binaries = [s.replace('0b', '') for s in binaries]
     padded = [s.rjust(8, '0') for s in stripped_binaries]
-    
+
     return bfloat(''.join(padded)[:16])
+
+
+#-----------------------------------------------------------------------------------------------
+
+def bfloat2f(num):
+	exp_mag = int(num.exp,2)
+	start = -1
+	man_mag = 0.0
+	for m in num.man:
+		man_mag = man_mag + int(m) * 2 ** (start)
+		start = start - 1
+
+	if num.exp == '00000000':
+		if num.man == '0000000':
+			if(num.sign == '1'):
+				return -0.0
+			else:
+				return 0.0
+		else:
+			out = ((-1)**int(num.sign) * 2**(exp_mag - 126) * (man_mag))
+			return (float32(out))
+	elif num.value == 'inf':
+		return float(int(num.sign)*'-' +'Inf')
+	else:
+		out = ((-1)**int(num.sign) * 2**(exp_mag - 127) * (man_mag + 1))
+		return (float32(out))
 
 
 #-----------------------------------------------------------------------------------------------
@@ -147,21 +174,21 @@ def bfloat_mult(a, b):
 	else:
 		o_exp += len(o_man) - (dec_len) - (1)
 
-	#shift mantissa to right to accomudate for negative exp 
-	if o_exp <= 0: 
+	#shift mantissa to right to accomudate for negative exp
+	if o_exp <= 0:
 		o_man = '0'*(-o_exp) + o_man
 		o_man = o_man[0:7].ljust(7, '0')
 		return bfloat(o_sign, '0'*8, o_man)
-		
+
 	if o_exp >= 255:  #if o_exp > '1111_1111'
 		return bfloat(o_sign, '1'*8, '0'*7)
 
 	o_exp = bin(o_exp)[2:].rjust(8, '0')
 	o_man = o_man[1:8].ljust(7, '0')
-	
+
 	return bfloat(o_sign, o_exp, o_man)
 # end mult_bfloat()----------------------------------------------------------------------------
-    
+
 def bfloat_add(a, b):
     if a.exp == "11111111":
         return a
@@ -186,7 +213,7 @@ def bfloat_add(a, b):
     else:
         b_man = "1" + b.man
         b_exp = int(b.exp, 2) - 127
-    
+
     if(int(a_man,2) < int(b_man,2)):
         a_man = a_man + '0'
         a_exp = a_exp - 1
@@ -206,13 +233,13 @@ def bfloat_add(a, b):
         a_exp = b_exp
     # print(a_man, b_man)
     # print(bin(a_man)[2:], bin(b_man)[2:])
-    if(a.sign == b.sign): 
+    if(a.sign == b.sign):
         out_man = a_man + b_man
     elif(a.sign == "1" and b.sign == "0"):
         out_man = b_man - a_man
     elif(a.sign == "0" and b.sign == "1"):
         out_man = a_man - b_man
-    
+
     if(out_man < 0):
         out_sign = "1"
         out_man = -out_man
@@ -233,7 +260,7 @@ def bfloat_add(a, b):
 
     else:
         out_exp = a_exp + 127
-        
+
     if out_exp <= 0:
         out_man = bin(out_man >> -out_exp)[2:]
         out_man = out_man.rjust(8, '0')
@@ -249,7 +276,7 @@ def bfloat_add(a, b):
     out_man = bin(out_man)[2:]
     if len(out_man) < 8:
         out_man = out_man.rjust(8, '0')
-    
+
     # print(out_sign, out_exp, out_man)
     return bfloat(out_sign, out_exp, (out_man)[1:8])
 #End bfloat_add() -------------------------------------------------
@@ -261,7 +288,7 @@ if __name__ == '__main__':
 	# a = bfloat(s1,e1,m1)
 	# b = bfloat(s2,e2,m2)
 	# sum = bfloat_add(a,b)
-	# sum32 = a.display_dec() + b.display_dec() 
+	# sum32 = a.display_dec() + b.display_dec()
 
 	# print("binary a: ", a.sign, a.exp, a.man)
 	# print("binary b: ", b.sign, b.exp, b.man)
@@ -270,7 +297,6 @@ if __name__ == '__main__':
 	# print("sum32 : ", sum32)
 	# print("sum   : ", sum.display_dec())
 	# print("sum bin: ", sum.display_bin())
-	
+
 	b = f2bfloat(54.1567)
 	print(b.display_dec())
-
